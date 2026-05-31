@@ -1,0 +1,122 @@
+<section class="admin-page">
+  <div class="section-head">
+    <h2>Admin Dashboard</h2>
+    <p class="sub">Guest & RSVP management</p>
+  </div>
+
+  <!-- Login -->
+  <div class="admin-login" *ngIf="!loggedIn">
+    <p>Admin key is set in <code>environment.ts</code>.</p>
+    <button (click)="login()" [disabled]="loading">{{ loading ? 'Verifying…' : 'Sign in' }}</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div *ngIf="loggedIn">
+
+    <!-- Stats -->
+    <div class="stat-row">
+      <div class="stat"><div class="stat-n">{{ stats.totalGuests }}</div><div class="stat-l">Guests invited</div></div>
+      <div class="stat"><div class="stat-n">{{ stats.rsvpedCount }}</div><div class="stat-l">RSVPed</div></div>
+      <div class="stat"><div class="stat-n">{{ stats.pendingCount }}</div><div class="stat-l">Pending</div></div>
+      <div class="stat"><div class="stat-n">{{ stats.attending }}</div><div class="stat-l">Attending</div></div>
+      <div class="stat"><div class="stat-n">{{ stats.totalAttending }}</div><div class="stat-l">Total seats</div></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button class="tool-btn" (click)="showAddForm = !showAddForm">+ Add guest</button>
+      <label class="tool-btn import-label">
+        ⬆ Import CSV
+        <input type="file" accept=".csv" (change)="onFileSelected($event)" hidden />
+      </label>
+      <button class="tool-btn" (click)="downloadTemplate()">⬇ CSV template</button>
+      <button class="tool-btn" (click)="exportCsv()">⬇ Export all</button>
+      <span class="import-status" *ngIf="importStatus">{{ importStatus }}</span>
+    </div>
+
+    <!-- Add guest form -->
+    <div class="add-form" *ngIf="showAddForm">
+      <div class="add-fields">
+        <input type="text" [(ngModel)]="newGuest.fullName" placeholder="Full name *" />
+        <input type="email" [(ngModel)]="newGuest.email" placeholder="Email (optional)" />
+        <input type="text" [(ngModel)]="newGuest.groupName" placeholder="Group (e.g. Family)" />
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="newGuest.allowedPlusOne" />
+          Allow +1
+        </label>
+        <button class="submit-btn small" (click)="addGuest()">Add</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button [class.active]="view === 'guests'" (click)="view = 'guests'">All guests ({{ guests.length }})</button>
+      <button [class.active]="view === 'rsvps'" (click)="view = 'rsvps'">RSVPs ({{ rsvpedGuests.length }})</button>
+    </div>
+
+    <!-- Guest list -->
+    <table class="rsvp-table" *ngIf="view === 'guests'">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Group</th>
+          <th>+1</th>
+          <th>Status</th>
+          <th>RSVP link</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let g of guests">
+          <td>{{ g.fullName }}</td>
+          <td>{{ g.groupName || '—' }}</td>
+          <td>{{ g.allowedPlusOne ? 'Yes' : 'No' }}</td>
+          <td>
+            <span class="badge" [class.yes]="g.hasRsvped" [class.pending]="!g.hasRsvped">
+              {{ g.hasRsvped ? (g.rsvp?.isAttending ? 'Attending' : 'Declined') : 'Pending' }}
+            </span>
+          </td>
+          <td>
+            <button class="link-btn" (click)="copyLink(g.token)">
+              {{ copiedToken === g.token ? '✓ Copied!' : 'Copy link' }}
+            </button>
+          </td>
+          <td><button class="del-btn" (click)="deleteGuest(g.id, g.fullName)">✕</button></td>
+        </tr>
+        <tr *ngIf="guests.length === 0">
+          <td colspan="6" class="empty">No guests yet. Add one above or import a CSV.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- RSVP details view -->
+    <table class="rsvp-table" *ngIf="view === 'rsvps'">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Attending</th>
+          <th>Meal</th>
+          <th>+1 name</th>
+          <th>+1 meal</th>
+          <th>Dietary notes</th>
+          <th>Submitted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let g of rsvpedGuests">
+          <td>{{ g.fullName }}</td>
+          <td><span class="badge" [class.yes]="g.rsvp!.isAttending" [class.no]="!g.rsvp!.isAttending">{{ g.rsvp!.isAttending ? 'Yes' : 'No' }}</span></td>
+          <td>{{ g.rsvp!.mealPreference || '—' }}</td>
+          <td>{{ g.rsvp!.plusOneName || '—' }}</td>
+          <td>{{ g.rsvp!.plusOneMealPreference || '—' }}</td>
+          <td>{{ g.rsvp!.dietaryRestrictions || '—' }}</td>
+          <td>{{ g.rsvp!.submittedAt | date:'mediumDate' }}</td>
+        </tr>
+        <tr *ngIf="rsvpedGuests.length === 0">
+          <td colspan="7" class="empty">No RSVPs received yet.</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>

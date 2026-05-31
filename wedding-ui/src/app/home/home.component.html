@@ -1,0 +1,20 @@
+<section class="home-page">
+  <div class="hero">
+    <p class="hero-sub">We're getting married</p>
+    <h1>Arbie <span>&amp;</span> Jerzey</h1>
+    <p class="hero-date">Saturday, December 14, 2026</p>
+    <p class="hero-venue">Manila, Philippines</p>
+
+    <p class="hero-greeting" *ngIf="guestName">Dear {{ guestName }}, you're invited!</p>
+
+    <div class="hero-actions">
+      <a routerLink="/details" class="hero-cta">View wedding details</a>
+      <a *ngIf="inviteToken" [routerLink]="['/rsvp', inviteToken]" class="hero-cta primary">RSVP</a>
+    </div>
+  </div>
+
+  <div class="home-note" *ngIf="inviteToken">
+    <p class="icon">🌿</p>
+    <p>Explore the details above, then RSVP when you're ready — your response is linked to this invitation.</p>
+  </div>
+</section>

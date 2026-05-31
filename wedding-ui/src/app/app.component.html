@@ -1,0 +1,18 @@
+<div class="site">
+  <header class="site-header">
+    <a routerLink="/" class="site-title">Arbie &amp; Jerzey</a>
+    <nav class="site-nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a routerLink="/details" routerLinkActive="active">Details</a>
+      <a *ngIf="inviteToken" [routerLink]="['/rsvp', inviteToken]" routerLinkActive="active">RSVP</a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <router-outlet />
+  </main>
+
+  <footer class="site-footer">
+    <p>With love &mdash; we can't wait to celebrate with you.</p>
+  </footer>
+</div>

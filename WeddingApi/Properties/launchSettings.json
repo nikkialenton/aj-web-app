@@ -1,0 +1,22 @@
+{
+  "profiles": {
+    "WeddingApi": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53458;http://localhost:53459"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "launchBrowser": false,
+      "launchUrl": "https://localhost:53458",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:53458;http://localhost:53459"
+      },
+      "distributionName": ""
+    }
+  }
+}
