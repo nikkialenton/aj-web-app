@@ -8,6 +8,7 @@ wedding-ui/*.log
 WeddingApi/bin/
 WeddingApi/obj/
 WeddingApi/.vs/
+WeddingApi/_buildcheck/
 
 # Local secrets (keep appsettings.json as template; use Development for real values)
 WeddingApi/appsettings.Development.json
