@@ -1,60 +1,55 @@
-.rsvp-page {
-  max-width: 560px;
-  margin: 0 auto;
-  padding: 2.5rem 1.5rem 3rem;
+.rsvp-page { background: var(--cream); }
+
+.page-hero {
+  height: 280px;
+  background: linear-gradient(160deg, #b8c8a0, #8aaa72);
 }
 
 .rsvp-wrap {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 2rem 1.75rem;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
 }
 
-.plus-one-section {
-  margin: 1.5rem 0;
-  padding: 1.25rem;
-  background: var(--bg);
-  border-radius: 4px;
+.rsvp-deadline {
+  text-align: center;
+  margin-bottom: 2rem;
 
-  .plus-one-label {
-    margin: 0 0 1rem;
-    font-size: 0.9rem;
-    color: var(--accent);
-    font-weight: 500;
+  h3 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    color: var(--dark);
+    margin: 0 0 8px;
+    u { text-decoration-color: var(--salmon); }
   }
+  p { font-size: 14px; color: var(--muted); margin: 0; }
 }
 
-.readonly-card {
-  .readonly-label {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin: 0 0 1.25rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
-  }
+.faq-banner {
+  background: var(--pink);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dark);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
 }
 
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--border);
-
-  &:last-child {
-    border-bottom: none;
+.faq-item {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  .faq-label {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--dark); margin-bottom: 6px;
   }
+  .faq-body { font-size: 14px; line-height: 1.7; color: var(--text); }
+}
 
-  .summary-label {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    flex-shrink: 0;
-  }
-
-  .summary-message {
-    text-align: right;
-    font-style: italic;
-  }
+.rsvp-form-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
 }

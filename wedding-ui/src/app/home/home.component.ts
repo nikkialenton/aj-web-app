@@ -22,6 +22,12 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    document.addEventListener('contextmenu', (e) => {
+      if ((e.target as HTMLElement).tagName === 'IMG') {
+        e.preventDefault();
+      }
+    });
+    
     const token = this.route.snapshot.paramMap.get('token') ?? this.invite.getToken();
     if (!token) return;
 

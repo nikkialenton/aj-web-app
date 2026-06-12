@@ -1,0 +1,55 @@
+.gifts-page { background: var(--cream); }
+
+.page-hero {
+  height: 280px;
+  background: linear-gradient(160deg, #b8c8a0, #8aaa72);
+}
+
+.sub-banner {
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  font-style: italic;
+  font-weight: 400;
+  padding: 12px 2rem;
+}
+
+.gifts-content {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  text-align: center;
+
+  p { font-size: 14px; line-height: 1.8; color: var(--text); margin-bottom: 1rem; }
+}
+
+.bank-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  text-align: center;
+
+  .bank-name {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+
+  .bank-detail { font-size: 13px; color: var(--muted); }
+
+  .bank-acct {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--dark);
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  &.maya .bank-name { color: #2db84d; }
+  &.maribank .bank-name { color: #e87722; }
+}

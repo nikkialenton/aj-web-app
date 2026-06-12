@@ -1,5 +1,10 @@
 <div class="rsvp-page">
 
+  <div class="page-hero photo-placeholder">
+    <!-- <img src="assets/photos/rsvp.jpg" alt="Arbie and Jerzey"> -->
+    <span class="swap-label">📸 couple photo</span>
+  </div>
+
   <!-- Loading -->
   <div class="state-center" *ngIf="state === 'loading'">
     <p class="muted">Finding your invitation…</p>
@@ -12,96 +17,114 @@
     <p class="muted">This link may be invalid or expired. Please check the link you received.</p>
   </div>
 
-  <!-- Already submitted — read-only view -->
+  <!-- Already submitted — read-only -->
   <div class="rsvp-wrap" *ngIf="state === 'already-submitted' && submittedRsvp">
-    <div class="section-head">
-      <p class="sub">Your response</p>
-      <h2>{{ guest?.fullName }}</h2>
+    <div class="rsvp-deadline">
+      <h3>{{ guest?.fullName }}</h3>
+      <p>You already submitted your RSVP on {{ submittedRsvp.submittedAt | date:'MMMM d, y' }}.</p>
     </div>
     <div class="readonly-card">
-      <p class="readonly-label">You already submitted your RSVP on {{ submittedRsvp.submittedAt | date:'MMMM d, y' }}.</p>
       <ng-container *ngTemplateOutlet="rsvpSummary; context: { rsvp: submittedRsvp, allowedPlusOne: guest?.allowedPlusOne }"></ng-container>
     </div>
   </div>
 
   <!-- RSVP Form -->
   <div class="rsvp-wrap" *ngIf="state === 'form'">
-    <div class="section-head">
-      <p class="sub">You're invited</p>
-      <h2>Hello, {{ guest?.fullName }} 👋</h2>
-      <p class="intro">We'd love to celebrate with you. Please let us know below.</p>
+    <div class="rsvp-deadline">
+      <h3>💌 Kindly RSVP by <u>August 1, 2026</u></h3>
+      <p>We would be grateful for your response as we finalize the details of our special day. 🤍</p>
     </div>
 
-    <div class="field">
-      <label>Will you attend?</label>
-      <div class="attend-btns">
-        <button [class.sel]="form.isAttending" (click)="setAttending(true)">Joyfully accepts</button>
-        <button [class.sel]="!form.isAttending" (click)="setAttending(false)">Regretfully declines</button>
+    <div class="faq-banner">FREQUENTLY ASKED QUESTIONS ❓</div>
+    <div class="faq-item">
+      <div class="faq-label">⏰ Arrival Time</div>
+      <div class="faq-body">We recommend arriving by 2:30 PM so you can get settled before the ceremony begins.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-label">🎁 Gifts</div>
+      <div class="faq-body">Your presence is the greatest gift of all. If you'd like to bless us further, a little envelope for our future together would be greatly appreciated. 🤍</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-label">🤍 A Gentle Reminder</div>
+      <div class="faq-body">Due to limited venue capacity, kindly ask that only guests named on the invitation attend. Our celebration will be adults-only. Thank you for your understanding.</div>
+    </div>
+
+    <div class="rsvp-form-section">
+      <div class="section-head" style="margin-bottom:1.5rem">
+        <p class="sub">You're invited</p>
+        <h2>Hello, {{ guest?.fullName }} 👋</h2>
+        <p class="intro">We'd love to celebrate with you. Please let us know below.</p>
       </div>
-    </div>
 
-    <ng-container *ngIf="form.isAttending">
       <div class="field">
-        <label>Your meal preference</label>
-        <select [(ngModel)]="form.mealPreference">
-          <option value="">Select one</option>
-          <option value="Chicken">Chicken</option>
-          <option value="Fish">Fish</option>
-          <option value="Vegetarian">Vegetarian</option>
-        </select>
+        <label>Will you attend?</label>
+        <div class="attend-btns">
+          <button [class.sel]="form.isAttending" (click)="setAttending(true)">Joyfully accepts</button>
+          <button [class.sel]="!form.isAttending" (click)="setAttending(false)">Regretfully declines</button>
+        </div>
       </div>
 
-      <!-- Plus one section — only shown if allowed -->
-      <div class="plus-one-section" *ngIf="guest?.allowedPlusOne">
-        <p class="plus-one-label">You're welcome to bring a guest</p>
+      <ng-container *ngIf="form.isAttending">
         <div class="field">
-          <label>Will your plus one be joining?</label>
-          <div class="attend-btns">
-            <button [class.sel]="form.plusOneAttending === true" (click)="setPlusOne(true)">Yes, joining</button>
-            <button [class.sel]="form.plusOneAttending === false" (click)="setPlusOne(false)">No, just me</button>
-          </div>
+          <label>Your meal preference</label>
+          <select [(ngModel)]="form.mealPreference">
+            <option value="">Select one</option>
+            <option value="Chicken">Chicken</option>
+            <option value="Fish">Fish</option>
+            <option value="Vegetarian">Vegetarian</option>
+          </select>
         </div>
 
-        <ng-container *ngIf="form.plusOneAttending === true">
+        <div class="plus-one-section" *ngIf="guest?.allowedPlusOne">
+          <p class="plus-one-label">You're welcome to bring a guest 🤍</p>
           <div class="field">
-            <label>Plus one's name</label>
-            <input type="text" [(ngModel)]="form.plusOneName" placeholder="Full name" />
+            <label>Will your plus one be joining?</label>
+            <div class="attend-btns">
+              <button [class.sel]="form.plusOneAttending === true" (click)="setPlusOne(true)">Yes, joining</button>
+              <button [class.sel]="form.plusOneAttending === false" (click)="setPlusOne(false)">No, just me</button>
+            </div>
           </div>
-          <div class="field">
-            <label>Plus one's meal preference</label>
-            <select [(ngModel)]="form.plusOneMealPreference">
-              <option value="">Select one</option>
-              <option value="Chicken">Chicken</option>
-              <option value="Fish">Fish</option>
-              <option value="Vegetarian">Vegetarian</option>
-            </select>
-          </div>
-        </ng-container>
-      </div>
+          <ng-container *ngIf="form.plusOneAttending === true">
+            <div class="field">
+              <label>Plus one's name</label>
+              <input type="text" [(ngModel)]="form.plusOneName" placeholder="Full name" />
+            </div>
+            <div class="field">
+              <label>Plus one's meal preference</label>
+              <select [(ngModel)]="form.plusOneMealPreference">
+                <option value="">Select one</option>
+                <option value="Chicken">Chicken</option>
+                <option value="Fish">Fish</option>
+                <option value="Vegetarian">Vegetarian</option>
+              </select>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="field">
+          <label>Dietary restrictions or allergies</label>
+          <input type="text" [(ngModel)]="form.dietaryRestrictions" placeholder="None, or describe here" />
+        </div>
+      </ng-container>
 
       <div class="field">
-        <label>Dietary restrictions or allergies</label>
-        <input type="text" [(ngModel)]="form.dietaryRestrictions" placeholder="None, or describe here" />
+        <label>Message to Arbie &amp; Jerzey (optional)</label>
+        <textarea [(ngModel)]="form.message" placeholder="Share your well wishes…"></textarea>
       </div>
-    </ng-container>
 
-    <div class="field">
-      <label>Message to the couple (optional)</label>
-      <textarea [(ngModel)]="form.message" placeholder="Share your well wishes…"></textarea>
+      <p class="error" *ngIf="submitError">{{ submitError }}</p>
+      <button class="submit-btn" (click)="submit()" [disabled]="submitting">
+        {{ submitting ? 'Sending…' : 'Send my RSVP 💌' }}
+      </button>
     </div>
-
-    <p class="error" *ngIf="submitError">{{ submitError }}</p>
-    <button class="submit-btn" (click)="submit()" [disabled]="submitting">
-      {{ submitting ? 'Sending…' : 'Send my RSVP' }}
-    </button>
   </div>
 
-  <!-- Submitted confirmation -->
+  <!-- Success -->
   <div class="rsvp-wrap" *ngIf="state === 'submitted' && submittedRsvp">
-    <div class="section-head">
-      <p class="icon">🌿</p>
-      <h2>Thank you, {{ guest?.fullName }}!</h2>
-      <p class="intro">Your RSVP has been received. Here's a summary of your response.</p>
+    <div class="rsvp-deadline" style="text-align:center;padding:1rem 0">
+      <p style="font-size:2rem">🌿</p>
+      <h3>Thank you, {{ guest?.fullName }}!</h3>
+      <p>Your RSVP has been received. We can't wait to celebrate with you!</p>
     </div>
     <div class="readonly-card">
       <ng-container *ngTemplateOutlet="rsvpSummary; context: { rsvp: submittedRsvp, allowedPlusOne: guest?.allowedPlusOne }"></ng-container>
@@ -110,7 +133,6 @@
 
 </div>
 
-<!-- Reusable read-only RSVP summary -->
 <ng-template #rsvpSummary let-rsvp="rsvp" let-allowedPlusOne="allowedPlusOne">
   <div class="summary-row">
     <span class="summary-label">Attendance</span>

@@ -1,18 +1,26 @@
 <div class="site">
-  <header class="site-header">
-    <a routerLink="/" class="site-title">Arbie &amp; Jerzey</a>
-    <nav class="site-nav">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-      <a routerLink="/details" routerLinkActive="active">Details</a>
-      <a *ngIf="inviteToken" [routerLink]="['/rsvp', inviteToken]" routerLinkActive="active">RSVP</a>
-    </nav>
-  </header>
+
+  <nav class="site-nav">
+    <div class="nav-logo">A <span>&</span> J</div>
+    <button class="hamburger" (click)="menuOpen = !menuOpen" [class.open]="menuOpen">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" [class.open]="menuOpen">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="menuOpen = false">home</a>
+      <a routerLink="/entourage" routerLinkActive="active" (click)="menuOpen = false">entourage</a>
+      <a routerLink="/directions" routerLinkActive="active" (click)="menuOpen = false">directions</a>
+      <a routerLink="/attire" routerLinkActive="active" (click)="menuOpen = false">attire</a>
+      <a routerLink="/gifts" routerLinkActive="active" (click)="menuOpen = false">gifts</a>
+      <a *ngIf="inviteToken" [routerLink]="['/rsvp', inviteToken]" routerLinkActive="active" (click)="menuOpen = false">rsvp</a>
+    </div>
+  </nav>
 
   <main class="site-main">
     <router-outlet />
   </main>
 
   <footer class="site-footer">
-    <p>With love &mdash; we can't wait to celebrate with you.</p>
+    <p>With love, Arbie &amp; Jerzey &mdash; we can't wait to celebrate with you 🥂</p>
   </footer>
+
 </div>

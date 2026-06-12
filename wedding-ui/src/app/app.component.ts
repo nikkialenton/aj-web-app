@@ -13,6 +13,7 @@ import { InviteService } from './core/services/invite.service';
 })
 export class AppComponent implements OnInit {
   inviteToken: string | null = null;
+  menuOpen = false;
 
   constructor(private invite: InviteService, private router: Router) {
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
@@ -23,4 +24,5 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.inviteToken = this.invite.getToken();
   }
+  
 }
