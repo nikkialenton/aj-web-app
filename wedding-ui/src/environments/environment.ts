@@ -6,6 +6,6 @@ export const environment = {
   adminUsers: [
     { username: 'arbie', password: 'jerz_1100!' },
     { username: 'jerzey', password: 'arbie_0011!' },
-    { username: 'support', password: 'admin_sup01' }
+    { username: 'support', password: 'support08' }
   ]
 };

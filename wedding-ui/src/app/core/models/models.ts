@@ -1,5 +1,6 @@
 export interface GuestLookup {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   allowedPlusOne: boolean;
   hasRsvped: boolean;
   existingRsvp?: RsvpView;
@@ -22,7 +23,8 @@ export interface RsvpCreate {
 
 export interface GuestAdmin {
   id: number;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   token: string;
   allowedPlusOne: boolean;
@@ -32,7 +34,8 @@ export interface GuestAdmin {
 }
 
 export interface GuestCreate {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   allowedPlusOne: boolean;
   groupName: string;

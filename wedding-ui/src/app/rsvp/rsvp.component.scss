@@ -1,5 +1,13 @@
 .rsvp-page { background: var(--cream); }
 
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
 .page-hero {
   height: 80vh;
   position: relative;

@@ -29,7 +29,7 @@ public class GuestController : ControllerBase
         if (!ValidKey(key)) return Unauthorized();
 
         var guests = await _db.Guests.Include(g => g.Rsvp)
-            .OrderBy(g => g.GroupName).ThenBy(g => g.FullName)
+            .OrderBy(g => g.GroupName).ThenBy(g => g.LastName).ThenBy(g => g.FirstName)
             .ToListAsync();
 
         return Ok(guests.Select(ToAdminDto));
@@ -67,14 +67,16 @@ public class GuestController : ControllerBase
 
         var guest = new Guest
         {
-            FullName = dto.FullName.Trim(),
+            FirstName = dto.FirstName.Trim(),
+            LastName = dto.LastName.Trim(),
             Email = dto.Email.Trim().ToLower(),
-            Token = Guid.NewGuid().ToString("N"),
             AllowedPlusOne = dto.AllowedPlusOne,
             GroupName = dto.GroupName.Trim()
         };
 
         _db.Guests.Add(guest);
+        await _db.SaveChangesAsync();
+        guest.Token = await GenerateUniqueToken(guest.FullName);
         await _db.SaveChangesAsync();
         return Ok(ToAdminDto(guest));
     }
@@ -103,12 +105,12 @@ public class GuestController : ControllerBase
 
         foreach (var dto in records)
         {
-            if (string.IsNullOrWhiteSpace(dto.FullName)) continue;
+            if (string.IsNullOrWhiteSpace(dto.FirstName)) continue;
             var guest = new Guest
             {
-                FullName = dto.FullName.Trim(),
+                FirstName = dto.FirstName.Trim(),
+                LastName = dto.LastName.Trim(),
                 Email = dto.Email?.Trim().ToLower() ?? string.Empty,
-                Token = Guid.NewGuid().ToString("N"),
                 AllowedPlusOne = dto.AllowedPlusOne,
                 GroupName = dto.GroupName?.Trim() ?? string.Empty
             };
@@ -116,6 +118,13 @@ public class GuestController : ControllerBase
             added.Add(guest);
         }
 
+        await _db.SaveChangesAsync();
+        var usedInBatch = new HashSet<string>();
+        foreach (var g in added)
+        {
+            g.Token = await GenerateUniqueToken(g.FullName, usedInBatch);
+            usedInBatch.Add(g.Token);
+        }
         await _db.SaveChangesAsync();
         return Ok(new { imported = added.Count });
     }
@@ -141,11 +150,12 @@ public class GuestController : ControllerBase
         if (!ValidKey(key)) return Unauthorized();
 
         var guests = await _db.Guests.Include(g => g.Rsvp)
-            .OrderBy(g => g.FullName).ToListAsync();
+            .OrderBy(g => g.LastName).ThenBy(g => g.FirstName).ToListAsync();
 
         var rows = guests.Select(g => new
         {
-            g.FullName,
+            g.FirstName,
+            g.LastName,
             g.Email,
             g.GroupName,
             g.AllowedPlusOne,
@@ -174,11 +184,28 @@ public class GuestController : ControllerBase
     public IActionResult Template([FromHeader(Name = "X-Admin-Key")] string? key)
     {
         if (!ValidKey(key)) return Unauthorized();
-        var csv = "FullName,Email,AllowedPlusOne,GroupName\n" +
-                  "Maria Santos,maria@email.com,true,Family\n" +
-                  "Jose Reyes,jose@email.com,false,Work\n";
+        var csv = "FirstName,LastName,Email,AllowedPlusOne,GroupName\n" +
+                  "Maria,Santos,maria@email.com,true,Family\n" +
+                  "Jose,Reyes,jose@email.com,false,Work\n";
         var bytes = System.Text.Encoding.UTF8.GetBytes(csv);
         return File(bytes, "text/csv", "guest-import-template.csv");
+    }
+
+    private async Task<string> GenerateUniqueToken(string fullName, HashSet<string>? reserved = null)
+    {
+        var slug = new string(fullName.ToLowerInvariant()
+            .Replace(' ', '-')
+            .Where(c => char.IsAsciiLetterOrDigit(c) || c == '-')
+            .ToArray());
+
+        if (!await _db.Guests.AnyAsync(g => g.Token == slug) && (reserved == null || !reserved.Contains(slug)))
+            return slug;
+
+        var suffix = 2;
+        while (await _db.Guests.AnyAsync(g => g.Token == $"{slug}-{suffix}") || (reserved?.Contains($"{slug}-{suffix}") == true))
+            suffix++;
+
+        return $"{slug}-{suffix}";
     }
 
     private bool ValidKey(string? key) =>
@@ -187,7 +214,8 @@ public class GuestController : ControllerBase
     private static GuestAdminDto ToAdminDto(Guest g) => new()
     {
         Id = g.Id,
-        FullName = g.FullName,
+        FirstName = g.FirstName,
+        LastName = g.LastName,
         Email = g.Email,
         Token = g.Token,
         AllowedPlusOne = g.AllowedPlusOne,

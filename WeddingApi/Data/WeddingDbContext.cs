@@ -16,7 +16,9 @@ public class WeddingDbContext : DbContext
         {
             e.HasKey(g => g.Id);
             e.HasIndex(g => g.Token).IsUnique();
-            e.Property(g => g.FullName).HasMaxLength(200).IsRequired();
+            e.Ignore(g => g.FullName);
+            e.Property(g => g.FirstName).HasMaxLength(100).IsRequired();
+            e.Property(g => g.LastName).HasMaxLength(100).IsRequired();
             e.Property(g => g.Email).HasMaxLength(200);
             e.Property(g => g.Token).HasMaxLength(64).IsRequired();
             e.Property(g => g.GroupName).HasMaxLength(100);

@@ -3,7 +3,8 @@ namespace WeddingApi.DTOs;
 // Returned when guest loads their link
 public class GuestLookupDto
 {
-    public string FullName { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
     public bool AllowedPlusOne { get; set; }
     public bool HasRsvped { get; set; }
     public RsvpViewDto? ExistingRsvp { get; set; }
@@ -37,7 +38,8 @@ public class RsvpCreateDto
 // Admin — create or import a single guest
 public class GuestCreateDto
 {
-    public string FullName { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public bool AllowedPlusOne { get; set; }
     public string GroupName { get; set; } = string.Empty;
@@ -47,7 +49,8 @@ public class GuestCreateDto
 public class GuestAdminDto
 {
     public int Id { get; set; }
-    public string FullName { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Token { get; set; } = string.Empty;
     public bool AllowedPlusOne { get; set; }

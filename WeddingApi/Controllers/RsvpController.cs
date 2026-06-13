@@ -27,7 +27,8 @@ public class RsvpController : ControllerBase
 
         return Ok(new GuestLookupDto
         {
-            FullName = guest.FullName,
+            FirstName = guest.FirstName,
+            LastName = guest.LastName,
             AllowedPlusOne = guest.AllowedPlusOne,
             HasRsvped = guest.Rsvp != null,
             ExistingRsvp = guest.Rsvp == null ? null : MapRsvpView(guest.Rsvp)

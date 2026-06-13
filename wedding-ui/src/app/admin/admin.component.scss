@@ -44,6 +44,46 @@
   }
 }
 
+.message-cell {
+  max-width: 220px;
+  position: relative;
+
+  .message-truncate {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &[data-tooltip]:hover::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 0;
+    background: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 300px;
+    white-space: normal;
+    word-break: break-word;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+}
+
+.add-error {
+  font-size: 13px;
+  color: #c0392b;
+  margin: 4px 0 0;
+}
+
+input.input-error {
+  border-color: #c0392b !important;
+}
+
 .section-head {
   text-align: center;
   margin-bottom: 2rem;

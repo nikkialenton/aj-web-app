@@ -14,13 +14,13 @@
   <div class="state-center" *ngIf="state === 'not-found'">
     <p class="icon">🌿</p>
     <h2>Invitation not found</h2>
-    <p class="muted">This link may be invalid or expired. Please check the link you received.</p>
+    <p class="muted">This link may be invalid or expired. Please check the link you received. <br> Please contact us if this persists. Thank you 🤍</p>
   </div>
 
   <!-- Already submitted — read-only -->
   <div class="rsvp-wrap" *ngIf="state === 'already-submitted' && submittedRsvp">
     <div class="rsvp-deadline">
-      <h3>{{ guest?.fullName }}</h3>
+      <h3>{{ guest?.firstName }} {{ guest?.lastName }}</h3>
       <p>You already submitted your RSVP on {{ submittedRsvp.submittedAt | date:'MMMM d, y' }}.</p>
       <p *ngIf="submittedRsvp.isAttending">We can't wait to celebrate with you!</p>
       <p *ngIf="!submittedRsvp.isAttending">We're sorry you can't make it, but we appreciate you letting us know. 🤍</p>
@@ -39,7 +39,7 @@
     
     <div class="rsvp-form-section">
       <div class="section-head" style="margin-bottom:1.5rem">
-        <h2>Hello, {{ guest?.fullName }} 👋</h2>
+        <h2>Hello, {{ guest?.firstName }} 👋</h2>
         <p class="intro">We'd love to celebrate with you. Please let us know below.</p>
       </div>
 
@@ -47,7 +47,7 @@
         <label>Will you attend?</label>
         <div class="attend-btns">
           <button [class.sel]="form.isAttending" (click)="setAttending(true)">Joyfully accepts</button>
-          <button [class.sel]="!form.isAttending" (click)="setAttending(false)">Regretfully declines</button>
+          <button [class.sel-no]="!form.isAttending" (click)="setAttending(false)">Regretfully declines</button>
         </div>
       </div>
 
@@ -72,7 +72,8 @@
 
       <div class="field">
         <label>Message to Arbie &amp; Jerzey (optional)</label>
-        <textarea [(ngModel)]="form.message" placeholder="Share your well wishes…"></textarea>
+        <textarea [(ngModel)]="form.message" placeholder="Share your well wishes…" maxlength="500"></textarea>
+        <span class="char-count">{{ form.message.length }}/500</span>
       </div>
 
       <p class="error" *ngIf="submitError">{{ submitError }}</p>
@@ -86,7 +87,7 @@
   <div class="rsvp-wrap" *ngIf="state === 'submitted' && submittedRsvp">
     <div class="rsvp-deadline" style="text-align:center;padding:1rem 0">
       <p style="font-size:2rem">🌿</p>
-      <h3>Thank you, {{ guest?.fullName }}!</h3>
+      <h3>Thank you, {{ guest?.firstName }}!</h3>
       <p *ngIf="submittedRsvp.isAttending">Your RSVP has been received. We can't wait to celebrate with you!</p>
       <p *ngIf="!submittedRsvp.isAttending">Your RSVP has been received. We're sorry you can't make it, but we appreciate you letting us know. 🤍</p>
     </div>

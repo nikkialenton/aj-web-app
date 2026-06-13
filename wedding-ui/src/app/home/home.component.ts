@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
     this.inviteToken = token;
 
     this.rsvpService.lookup(token).subscribe({
-      next: (guest) => this.guestName = guest.fullName,
+      next: (guest) => this.guestName = `${guest.firstName}`.trim(),
       error: () => {}
     });
   }

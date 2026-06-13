@@ -26,7 +26,8 @@ export class AdminComponent implements OnInit {
   copiedToken: string | null = null;
   importStatus = '';
 
-  newGuest: GuestCreate = { fullName: '', email: '', allowedPlusOne: false, groupName: '' };
+  newGuest: GuestCreate = { firstName: '', lastName: '', email: '', allowedPlusOne: false, groupName: '' };
+  addGuestError = '';
   showAddForm = false;
 
   constructor(private guestService: GuestService) {}
@@ -54,12 +55,16 @@ export class AdminComponent implements OnInit {
   }
 
   addGuest() {
-    if (!this.newGuest.fullName) return;
+    if (!this.newGuest.firstName || !this.newGuest.lastName || !this.newGuest.groupName) {
+      this.addGuestError = 'First name, last name, and group are required.';
+      return;
+    }
+    this.addGuestError = '';
     this.guestService.create(this.newGuest).subscribe(g => {
       this.guests.unshift(g);
       this.stats.totalGuests++;
       this.stats.pendingCount++;
-      this.newGuest = { fullName: '', email: '', allowedPlusOne: false, groupName: '' };
+      this.newGuest = { firstName: '', lastName: '', email: '', allowedPlusOne: false, groupName: '' };
       this.showAddForm = false;
     });
   }
@@ -68,7 +73,7 @@ export class AdminComponent implements OnInit {
     if (!confirm(`Remove ${name} from the guest list?`)) return;
     this.guestService.delete(id).subscribe(() => {
       this.guests = this.guests.filter(g => g.id !== id);
-      this.stats.totalGuests--;
+      this.guestService.getStats().subscribe(s => this.stats = s);
     });
   }
 
@@ -97,6 +102,9 @@ export class AdminComponent implements OnInit {
 
   get rsvpedGuests() { return this.guests.filter(g => g.hasRsvped); }
   get pendingGuests() { return this.guests.filter(g => !g.hasRsvped); }
+  get groupOptions() {
+    return [...new Set(this.guests.map(g => g.groupName).filter(Boolean))].sort();
+  }
 
   exportCsv() { this.guestService.exportCsv(); }
   downloadTemplate() { this.guestService.downloadTemplate(); }

@@ -140,6 +140,8 @@ h1,h2,h3 { font-family: var(--font-display); font-weight: 400; }
     transition: all 0.2s;
     &:hover { border-color: var(--salmon); }
     &.sel { background: var(--salmon); color: #fff; border-color: var(--salmon); }
+    &.sel-no { background: #888; color: #fff; border-color: var(--salmon); }
+    &.sel-no:hover { border-color: #666; }
   }
 }
 
@@ -312,8 +314,21 @@ table {
   margin-bottom: 1rem;
 }
 .add-fields {
-  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-  input { flex: 1; min-width: 140px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-family: var(--font-body); font-size: 13px; }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+  input[type="text"], input[type="email"] {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .checkbox-label { justify-self: start; }
+  .submit-btn { justify-self: end; }
 }
 .checkbox-label { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; white-space: nowrap; }
 .link-btn {

@@ -38,16 +38,21 @@
 
     <!-- Add guest form -->
     <div class="add-form" *ngIf="showAddForm">
+      <datalist id="group-options">
+        <option *ngFor="let g of groupOptions" [value]="g"></option>
+      </datalist>
       <div class="add-fields">
-        <input type="text" [(ngModel)]="newGuest.fullName" placeholder="Full name *" />
+        <input type="text" [(ngModel)]="newGuest.firstName" placeholder="First name *" [class.input-error]="addGuestError && !newGuest.firstName" />
+        <input type="text" [(ngModel)]="newGuest.lastName" placeholder="Last name *" [class.input-error]="addGuestError && !newGuest.lastName" />
+        <input type="text" [(ngModel)]="newGuest.groupName" placeholder="Group *" list="group-options" [class.input-error]="addGuestError && !newGuest.groupName" />
         <input type="email" [(ngModel)]="newGuest.email" placeholder="Email (optional)" />
-        <input type="text" [(ngModel)]="newGuest.groupName" placeholder="Group (e.g. Family)" />
         <label class="checkbox-label">
           <input type="checkbox" [(ngModel)]="newGuest.allowedPlusOne" />
           Allow +1
         </label>
-        <button class="submit-btn small" (click)="addGuest()">Add</button>
+        <button class="submit-btn small" (click)="addGuest()">Add Guest</button>
       </div>
+      <p class="add-error" *ngIf="addGuestError">{{ addGuestError }}</p>
     </div>
 
     <!-- Tabs -->
@@ -70,7 +75,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let g of guests">
-          <td>{{ g.fullName }}</td>
+          <td>{{ g.firstName }} {{ g.lastName }}</td>
           <td>{{ g.groupName || '—' }}</td>
           <td>{{ g.allowedPlusOne ? 'Yes' : 'No' }}</td>
           <td>
@@ -83,7 +88,7 @@
               {{ copiedToken === g.token ? '✓ Copied!' : 'Copy link' }}
             </button>
           </td>
-          <td><button class="del-btn" (click)="deleteGuest(g.id, g.fullName)">✕</button></td>
+          <td><button class="del-btn" (click)="deleteGuest(g.id, g.firstName + ' ' + g.lastName)">✕</button></td>
         </tr>
         <tr *ngIf="guests.length === 0">
           <td colspan="6" class="empty">No guests yet. Add one above or import a CSV.</td>
@@ -98,18 +103,22 @@
           <th>Name</th>
           <th>Attending</th>
           <th>+1 name</th>
+          <th>Message</th>
           <th>Submitted</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let g of rsvpedGuests">
-          <td>{{ g.fullName }}</td>
+          <td>{{ g.firstName }} {{ g.lastName }}</td>
           <td><span class="badge" [class.yes]="g.rsvp!.isAttending" [class.no]="!g.rsvp!.isAttending">{{ g.rsvp!.isAttending ? 'Yes' : 'No' }}</span></td>
           <td>{{ g.rsvp!.plusOneName || '—' }}</td>
+          <td class="message-cell" [attr.data-tooltip]="g.rsvp!.message || null">
+            <span class="message-truncate">{{ g.rsvp!.message || '—' }}</span>
+          </td>
           <td>{{ g.rsvp!.submittedAt | date:'mediumDate' }}</td>
         </tr>
         <tr *ngIf="rsvpedGuests.length === 0">
-          <td colspan="4" class="empty">No RSVPs received yet.</td>
+          <td colspan="5" class="empty">No RSVPs received yet.</td>
         </tr>
       </tbody>
     </table>
