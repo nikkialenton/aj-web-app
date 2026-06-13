@@ -185,19 +185,10 @@ h1,h2,h3 { font-family: var(--font-display); font-weight: 400; }
   }
 }
 
-/* ── PAGE ENTER ANIMATION ── */
-@keyframes page-fade-in {
+/* ── HERO TITLE ENTER ── */
+@keyframes hero-title-enter {
   from { opacity: 0; }
   to   { opacity: 1; }
-}
-
-.home-page,
-.entourage-page,
-.attire-page,
-.directions-page,
-.gifts-page,
-.rsvp-page {
-  animation: page-fade-in 0.45s ease;
 }
 
 /* ── UTILITY ── */

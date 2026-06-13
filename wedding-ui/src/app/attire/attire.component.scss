@@ -36,6 +36,7 @@
   text-shadow: 0 2px 16px rgba(0,0,0,0.25);
   white-space: nowrap;
   pointer-events: none;
+  animation: hero-title-enter 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .banner {
@@ -46,14 +47,15 @@
 }
 
 .attire-content {
-  max-width: 680px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }
 
 .note {
   text-align: center;
-  font-size: 13px;
+  text-transform: uppercase;
+  font-size: 15px;
   color: var(--muted);
   margin-bottom: 1rem;
   letter-spacing: 0.05em;
@@ -62,29 +64,56 @@
 .swatches {
   display: flex;
   justify-content: center;
-  gap: 10px;
   margin-bottom: 2rem;
 }
-.swatch {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.7);
-  display: inline-block;
+
+.palette-img {
+  max-width: 360px;
+  width: 100%;
+  height: auto;
+  mix-blend-mode: multiply;
+  display: block;
 }
 
 .attire-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  @media (max-width: 540px) { grid-template-columns: 1fr; }
+  gap: 12.5rem;
+  align-items: start;
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
 }
 
 .attire-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  &[appScrollReveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  &[appScrollReveal]::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cream);
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+  }
+
+  &[appScrollReveal].revealed::after {
+    opacity: 0;
+  }
+
   h4 {
-    font-size: 11px;
+    font-size: 20px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--dark);
     text-align: center;
     margin: 0 0 6px;
@@ -93,25 +122,24 @@
 }
 
 .attire-note {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--muted);
   text-align: center;
   margin: 0 0 12px;
   line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.no-bg {
+  mix-blend-mode: multiply;
+  width: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
 }
 
 .dress-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-
-  .dress-thumb {
-    aspect-ratio: 2/3;
-    border-radius: 6px;
-    overflow: hidden;
-
-    img { width: 100%; height: 100%; object-fit: cover; }
-
-    &.tall { aspect-ratio: 1/1.6; }
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
