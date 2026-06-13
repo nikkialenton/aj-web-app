@@ -73,7 +73,7 @@
   text-align: center;
 
   .bank-name {
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -81,7 +81,7 @@
     margin-bottom: 4px;
   }
 
-  .bank-detail { font-size: 13px; color: var(--muted); }
+  .bank-detail { font-size: 15px; color: var(--muted); }
 
   .bank-acct {
     font-size: 16px;
@@ -93,4 +93,12 @@
 
   &.maya .bank-name { color: #2db84d; }
   &.maribank .bank-name { color: #e87722; }
+
+  .qr-img {
+    display: block;
+    margin: 1rem auto 0;
+    width: 400px;
+    height: auto;
+    border-radius: 8px;
+  }
 }
