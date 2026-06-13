@@ -9,9 +9,6 @@ export interface RsvpView {
   isAttending: boolean;
   plusOneAttending?: boolean;
   plusOneName: string;
-  mealPreference: string;
-  plusOneMealPreference: string;
-  dietaryRestrictions: string;
   message: string;
   submittedAt: string;
 }
@@ -20,9 +17,6 @@ export interface RsvpCreate {
   isAttending: boolean;
   plusOneAttending?: boolean;
   plusOneName: string;
-  mealPreference: string;
-  plusOneMealPreference: string;
-  dietaryRestrictions: string;
   message: string;
 }
 

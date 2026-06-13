@@ -1,8 +1,8 @@
 <div class="rsvp-page">
 
   <div class="page-hero photo-placeholder">
-    <!-- <img src="assets/photos/rsvp.jpg" alt="Arbie and Jerzey"> -->
-    <span class="swap-label">📸 couple photo</span>
+    <img src="assets/photos/other-hero.png" alt="Arbie and Jerzey">
+    <div class="hero-title">💌 RSVP</div>
   </div>
 
   <!-- Loading -->
@@ -22,6 +22,8 @@
     <div class="rsvp-deadline">
       <h3>{{ guest?.fullName }}</h3>
       <p>You already submitted your RSVP on {{ submittedRsvp.submittedAt | date:'MMMM d, y' }}.</p>
+      <p *ngIf="submittedRsvp.isAttending">We can't wait to celebrate with you!</p>
+      <p *ngIf="!submittedRsvp.isAttending">We're sorry you can't make it, but we appreciate you letting us know. 🤍</p>
     </div>
     <div class="readonly-card">
       <ng-container *ngTemplateOutlet="rsvpSummary; context: { rsvp: submittedRsvp, allowedPlusOne: guest?.allowedPlusOne }"></ng-container>
@@ -34,24 +36,9 @@
       <h3>💌 Kindly RSVP by <u>August 1, 2026</u></h3>
       <p>We would be grateful for your response as we finalize the details of our special day. 🤍</p>
     </div>
-
-    <div class="faq-banner">FREQUENTLY ASKED QUESTIONS ❓</div>
-    <div class="faq-item">
-      <div class="faq-label">⏰ Arrival Time</div>
-      <div class="faq-body">We recommend arriving by 2:30 PM so you can get settled before the ceremony begins.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-label">🎁 Gifts</div>
-      <div class="faq-body">Your presence is the greatest gift of all. If you'd like to bless us further, a little envelope for our future together would be greatly appreciated. 🤍</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-label">🤍 A Gentle Reminder</div>
-      <div class="faq-body">Due to limited venue capacity, kindly ask that only guests named on the invitation attend. Our celebration will be adults-only. Thank you for your understanding.</div>
-    </div>
-
+    
     <div class="rsvp-form-section">
       <div class="section-head" style="margin-bottom:1.5rem">
-        <p class="sub">You're invited</p>
         <h2>Hello, {{ guest?.fullName }} 👋</h2>
         <p class="intro">We'd love to celebrate with you. Please let us know below.</p>
       </div>
@@ -65,16 +52,6 @@
       </div>
 
       <ng-container *ngIf="form.isAttending">
-        <div class="field">
-          <label>Your meal preference</label>
-          <select [(ngModel)]="form.mealPreference">
-            <option value="">Select one</option>
-            <option value="Chicken">Chicken</option>
-            <option value="Fish">Fish</option>
-            <option value="Vegetarian">Vegetarian</option>
-          </select>
-        </div>
-
         <div class="plus-one-section" *ngIf="guest?.allowedPlusOne">
           <p class="plus-one-label">You're welcome to bring a guest 🤍</p>
           <div class="field">
@@ -89,21 +66,7 @@
               <label>Plus one's name</label>
               <input type="text" [(ngModel)]="form.plusOneName" placeholder="Full name" />
             </div>
-            <div class="field">
-              <label>Plus one's meal preference</label>
-              <select [(ngModel)]="form.plusOneMealPreference">
-                <option value="">Select one</option>
-                <option value="Chicken">Chicken</option>
-                <option value="Fish">Fish</option>
-                <option value="Vegetarian">Vegetarian</option>
-              </select>
-            </div>
           </ng-container>
-        </div>
-
-        <div class="field">
-          <label>Dietary restrictions or allergies</label>
-          <input type="text" [(ngModel)]="form.dietaryRestrictions" placeholder="None, or describe here" />
         </div>
       </ng-container>
 
@@ -124,15 +87,28 @@
     <div class="rsvp-deadline" style="text-align:center;padding:1rem 0">
       <p style="font-size:2rem">🌿</p>
       <h3>Thank you, {{ guest?.fullName }}!</h3>
-      <p>Your RSVP has been received. We can't wait to celebrate with you!</p>
+      <p *ngIf="submittedRsvp.isAttending">Your RSVP has been received. We can't wait to celebrate with you!</p>
+      <p *ngIf="!submittedRsvp.isAttending">Your RSVP has been received. We're sorry you can't make it, but we appreciate you letting us know. 🤍</p>
     </div>
     <div class="readonly-card">
       <ng-container *ngTemplateOutlet="rsvpSummary; context: { rsvp: submittedRsvp, allowedPlusOne: guest?.allowedPlusOne }"></ng-container>
     </div>
   </div>
 
+      <div class="faq-banner">FREQUENTLY ASKED QUESTIONS ❓</div>
+    <div class="faq-item">
+      <div class="faq-label">⏰ Arrival Time</div>
+      <div class="faq-body">We recommend arriving by 2:30 PM so you can get settled before the ceremony begins.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-label">🎁 Gifts</div>
+      <div class="faq-body">Your presence is the greatest gift of all. If you'd like to bless us further, a little envelope for our future together would be greatly appreciated. 🤍</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-label">🤍 A Gentle Reminder</div>
+      <div class="faq-body">Due to limited venue capacity, kindly ask that only guests named on the invitation attend. Our celebration will be adults-only. Thank you for your understanding.</div>
+    </div>
 </div>
-
 <ng-template #rsvpSummary let-rsvp="rsvp" let-allowedPlusOne="allowedPlusOne">
   <div class="summary-row">
     <span class="summary-label">Attendance</span>
@@ -141,24 +117,12 @@
     </span>
   </div>
   <ng-container *ngIf="rsvp.isAttending">
-    <div class="summary-row">
-      <span class="summary-label">Meal</span>
-      <span>{{ rsvp.mealPreference || '—' }}</span>
-    </div>
     <ng-container *ngIf="allowedPlusOne">
       <div class="summary-row">
         <span class="summary-label">Plus one</span>
         <span>{{ rsvp.plusOneAttending ? (rsvp.plusOneName || 'Yes') : 'Not joining' }}</span>
       </div>
-      <div class="summary-row" *ngIf="rsvp.plusOneAttending">
-        <span class="summary-label">Plus one meal</span>
-        <span>{{ rsvp.plusOneMealPreference || '—' }}</span>
-      </div>
     </ng-container>
-    <div class="summary-row" *ngIf="rsvp.dietaryRestrictions">
-      <span class="summary-label">Dietary notes</span>
-      <span>{{ rsvp.dietaryRestrictions }}</span>
-    </div>
   </ng-container>
   <div class="summary-row" *ngIf="rsvp.message">
     <span class="summary-label">Message</span>

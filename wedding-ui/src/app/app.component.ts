@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { filter } from 'rxjs';
 import { InviteService } from './core/services/invite.service';
 
 @Component({
@@ -15,14 +14,9 @@ export class AppComponent implements OnInit {
   inviteToken: string | null = null;
   menuOpen = false;
 
-  constructor(private invite: InviteService, private router: Router) {
-    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
-      this.inviteToken = this.invite.getToken();
-    });
-  }
+  constructor(private invite: InviteService) {}
 
   ngOnInit() {
-    this.inviteToken = this.invite.getToken();
+    this.invite.token$.subscribe(token => this.inviteToken = token);
   }
-  
 }

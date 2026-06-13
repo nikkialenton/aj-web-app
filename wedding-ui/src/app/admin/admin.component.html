@@ -6,7 +6,9 @@
 
   <!-- Login -->
   <div class="admin-login" *ngIf="!loggedIn">
-    <p>Admin key is set in <code>environment.ts</code>.</p>
+    <input type="text" [(ngModel)]="username" placeholder="Username" autocomplete="username" />
+    <input type="password" [(ngModel)]="password" placeholder="Password" autocomplete="current-password" (keydown.enter)="login()" />
+    <p class="login-error" *ngIf="loginError">{{ loginError }}</p>
     <button (click)="login()" [disabled]="loading">{{ loading ? 'Verifying…' : 'Sign in' }}</button>
   </div>
 
@@ -95,10 +97,7 @@
         <tr>
           <th>Name</th>
           <th>Attending</th>
-          <th>Meal</th>
           <th>+1 name</th>
-          <th>+1 meal</th>
-          <th>Dietary notes</th>
           <th>Submitted</th>
         </tr>
       </thead>
@@ -106,14 +105,11 @@
         <tr *ngFor="let g of rsvpedGuests">
           <td>{{ g.fullName }}</td>
           <td><span class="badge" [class.yes]="g.rsvp!.isAttending" [class.no]="!g.rsvp!.isAttending">{{ g.rsvp!.isAttending ? 'Yes' : 'No' }}</span></td>
-          <td>{{ g.rsvp!.mealPreference || '—' }}</td>
           <td>{{ g.rsvp!.plusOneName || '—' }}</td>
-          <td>{{ g.rsvp!.plusOneMealPreference || '—' }}</td>
-          <td>{{ g.rsvp!.dietaryRestrictions || '—' }}</td>
           <td>{{ g.rsvp!.submittedAt | date:'mediumDate' }}</td>
         </tr>
         <tr *ngIf="rsvpedGuests.length === 0">
-          <td colspan="7" class="empty">No RSVPs received yet.</td>
+          <td colspan="4" class="empty">No RSVPs received yet.</td>
         </tr>
       </tbody>
     </table>

@@ -26,9 +26,6 @@ export class RsvpComponent implements OnInit {
     isAttending: true,
     plusOneAttending: undefined,
     plusOneName: '',
-    mealPreference: '',
-    plusOneMealPreference: '',
-    dietaryRestrictions: '',
     message: ''
   };
 
@@ -66,10 +63,6 @@ export class RsvpComponent implements OnInit {
   }
 
   submit() {
-    if (!this.form.mealPreference && this.form.isAttending) {
-      this.submitError = 'Please select your meal preference.';
-      return;
-    }
     this.submitting = true;
     this.submitError = '';
     this.rsvpService.submit(this.token, this.form).subscribe({

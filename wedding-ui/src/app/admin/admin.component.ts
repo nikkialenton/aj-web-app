@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GuestService } from '../core/services/guest.service';
 import { GuestAdmin, GuestCreate, AdminStats } from '../core/models/models';
+import { environment } from '../../environments/environment';
 
 type AdminView = 'guests' | 'rsvps';
 
@@ -16,6 +17,9 @@ type AdminView = 'guests' | 'rsvps';
 export class AdminComponent implements OnInit {
   loggedIn = false;
   loading = false;
+  loginError = '';
+  username = '';
+  password = '';
   view: AdminView = 'guests';
   guests: GuestAdmin[] = [];
   stats: AdminStats = { totalGuests: 0, rsvpedCount: 0, pendingCount: 0, attending: 0, declined: 0, totalAttending: 0 };
@@ -30,10 +34,18 @@ export class AdminComponent implements OnInit {
   ngOnInit() {}
 
   login() {
+    const match = environment.adminUsers.find(
+      u => u.username === this.username && u.password === this.password
+    );
+    if (!match) {
+      this.loginError = 'Incorrect username or password.';
+      return;
+    }
+    this.loginError = '';
     this.loading = true;
     this.guestService.getStats().subscribe({
       next: (s) => { this.stats = s; this.loggedIn = true; this.loadGuests(); },
-      error: () => { alert('Invalid admin key.'); this.loading = false; }
+      error: () => { this.loginError = 'Could not connect to server.'; this.loading = false; }
     });
   }
 
