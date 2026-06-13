@@ -43,9 +43,9 @@
   grid-template-columns: 1fr auto 1fr; // photo takes only needed width
   background: rgb(214, 211, 94);
   min-height: 768px;
-  padding: 3rem;
+  padding: 10rem;
 
-  gap: 1rem; // reduced from 2rem
+  gap: 1rem;
   align-items: end; // all three columns align to bottom
 
   @media (max-width: 768px) {

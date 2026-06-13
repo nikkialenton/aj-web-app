@@ -49,15 +49,21 @@
 .entourage-list {
   display: flex;
   justify-content: center;
-  padding: 2.5rem 1.5rem;
+  padding: 0 3rem;
   background-image: url('/assets/photos/flower_bg.png');
   background-repeat: repeat;
   background-size: 620px;
   background-position: center;
+}
+
+.entourage-inner {
+  background: var(--cream);
+  max-width: 860px;
+  width: 100%;
+  padding: 2.5rem;
 
   img {
     width: 100%;
-    max-width: 860px;
     height: auto;
     display: block;
   }
