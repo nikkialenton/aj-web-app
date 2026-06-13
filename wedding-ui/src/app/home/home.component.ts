@@ -3,11 +3,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { InviteService } from '../core/services/invite.service';
 import { RsvpService } from '../core/services/rsvp.service';
+import { ScrollRevealDirective } from '../shared/scroll-reveal.directive';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ScrollRevealDirective],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

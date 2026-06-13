@@ -175,6 +175,16 @@ h1,h2,h3 { font-family: var(--font-display); font-weight: 400; }
   &.pending { background: #f5f0e0; color: #8a7340; }
 }
 
+/* ── SCROLL REVEAL ── */
+[appScrollReveal] {
+  opacity: 0;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+
+  &.revealed {
+    opacity: 1;
+  }
+}
+
 /* ── PAGE ENTER ANIMATION ── */
 @keyframes page-fade-in {
   from { opacity: 0; }
