@@ -5,7 +5,7 @@ import { GuestService } from '../core/services/guest.service';
 import { GuestAdmin, GuestCreate, AdminStats } from '../core/models/models';
 import { environment } from '../../environments/environment';
 
-type AdminView = 'guests' | 'rsvps';
+type AdminView = 'guests' | 'rsvps' | 'pending';
 
 @Component({
   selector: 'app-admin',

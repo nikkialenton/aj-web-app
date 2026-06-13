@@ -16,9 +16,6 @@ public class RsvpViewDto
     public bool IsAttending { get; set; }
     public bool? PlusOneAttending { get; set; }
     public string PlusOneName { get; set; } = string.Empty;
-    public string MealPreference { get; set; } = string.Empty;
-    public string PlusOneMealPreference { get; set; } = string.Empty;
-    public string DietaryRestrictions { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
     public DateTime SubmittedAt { get; set; }
 }
@@ -29,9 +26,6 @@ public class RsvpCreateDto
     public bool IsAttending { get; set; }
     public bool? PlusOneAttending { get; set; }
     public string PlusOneName { get; set; } = string.Empty;
-    public string MealPreference { get; set; } = string.Empty;
-    public string PlusOneMealPreference { get; set; } = string.Empty;
-    public string DietaryRestrictions { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
 }
 

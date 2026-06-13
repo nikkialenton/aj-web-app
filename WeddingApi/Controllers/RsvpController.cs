@@ -55,10 +55,6 @@ public class RsvpController : ControllerBase
             IsAttending = dto.IsAttending,
             PlusOneAttending = guest.AllowedPlusOne ? dto.PlusOneAttending : null,
             PlusOneName = guest.AllowedPlusOne ? dto.PlusOneName : string.Empty,
-            MealPreference = dto.MealPreference,
-            PlusOneMealPreference = guest.AllowedPlusOne && dto.PlusOneAttending == true
-                ? dto.PlusOneMealPreference : string.Empty,
-            DietaryRestrictions = dto.DietaryRestrictions,
             Message = dto.Message,
             SubmittedAt = DateTime.UtcNow
         };
@@ -74,9 +70,6 @@ public class RsvpController : ControllerBase
         IsAttending = r.IsAttending,
         PlusOneAttending = r.PlusOneAttending,
         PlusOneName = r.PlusOneName,
-        MealPreference = r.MealPreference,
-        PlusOneMealPreference = r.PlusOneMealPreference,
-        DietaryRestrictions = r.DietaryRestrictions,
         Message = r.Message,
         SubmittedAt = r.SubmittedAt
     };

@@ -19,11 +19,17 @@
 
   <!-- Already submitted — read-only -->
   <div class="rsvp-wrap" *ngIf="state === 'already-submitted' && submittedRsvp">
-    <div class="rsvp-deadline">
-      <h3>{{ guest?.firstName }} {{ guest?.lastName }}</h3>
-      <p>You already submitted your RSVP on {{ submittedRsvp.submittedAt | date:'MMMM d, y' }}.</p>
-      <p *ngIf="submittedRsvp.isAttending">We can't wait to celebrate with you!</p>
-      <p *ngIf="!submittedRsvp.isAttending">We're sorry you can't make it, but we appreciate you letting us know. 🤍</p>
+    <div class="rsvp-deadline" style="text-align:center">
+      <ng-container *ngIf="submittedRsvp.isAttending">
+        <p style="font-size:2rem">🎉</p>
+        <h3>We're looking forward to celebrating with you, {{ guest?.firstName }}!</h3>
+        <p>We already have your RSVP from {{ submittedRsvp.submittedAt | date:'MMMM d, y' }}. <br> We are so excited to celebrate this special day with you! 🤍</p>
+      </ng-container>
+      <ng-container *ngIf="!submittedRsvp.isAttending">
+        <p style="font-size:2rem">🌿</p>
+        <h3>Sorry you can't make it, {{ guest?.firstName }}, but we completely understand.</h3>
+        <p>We received your response on {{ submittedRsvp.submittedAt | date:'MMMM d, y' }}. <br> We're sad you won't be able to join us but thank you for letting us know 🤍</p>
+      </ng-container>
     </div>
     <div class="readonly-card">
       <ng-container *ngTemplateOutlet="rsvpSummary; context: { rsvp: submittedRsvp, allowedPlusOne: guest?.allowedPlusOne }"></ng-container>
@@ -64,7 +70,7 @@
           <ng-container *ngIf="form.plusOneAttending === true">
             <div class="field">
               <label>Plus one's name</label>
-              <input type="text" [(ngModel)]="form.plusOneName" placeholder="Full name" />
+              <input type="text" maxlength="50" [(ngModel)]="form.plusOneName" placeholder="Full name" />
             </div>
           </ng-container>
         </div>

@@ -31,8 +31,7 @@
         ⬆ Import CSV
         <input type="file" accept=".csv" (change)="onFileSelected($event)" hidden />
       </label>
-      <button class="tool-btn" (click)="downloadTemplate()">⬇ CSV template</button>
-      <button class="tool-btn" (click)="exportCsv()">⬇ Export all</button>
+      <button class="tool-btn" (click)="exportCsv()">⬇ Download Current Data as CSV</button>
       <span class="import-status" *ngIf="importStatus">{{ importStatus }}</span>
     </div>
 
@@ -59,6 +58,7 @@
     <div class="tabs">
       <button [class.active]="view === 'guests'" (click)="view = 'guests'">All guests ({{ guests.length }})</button>
       <button [class.active]="view === 'rsvps'" (click)="view = 'rsvps'">RSVPs ({{ rsvpedGuests.length }})</button>
+      <button [class.active]="view === 'pending'" (click)="view = 'pending'">Pending ({{ pendingGuests.length }})</button>
     </div>
 
     <!-- Guest list -->
@@ -79,7 +79,10 @@
           <td>{{ g.groupName || '—' }}</td>
           <td>{{ g.allowedPlusOne ? 'Yes' : 'No' }}</td>
           <td>
-            <span class="badge" [class.yes]="g.hasRsvped" [class.pending]="!g.hasRsvped">
+            <span class="badge"
+              [class.yes]="g.rsvp?.isAttending"
+              [class.no]="g.hasRsvped && !g.rsvp?.isAttending"
+              [class.pending]="!g.hasRsvped">
               {{ g.hasRsvped ? (g.rsvp?.isAttending ? 'Attending' : 'Declined') : 'Pending' }}
             </span>
           </td>
@@ -119,6 +122,35 @@
         </tr>
         <tr *ngIf="rsvpedGuests.length === 0">
           <td colspan="5" class="empty">No RSVPs received yet.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pending view -->
+    <table class="rsvp-table" *ngIf="view === 'pending'">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Group</th>
+          <th>+1</th>
+          <th>RSVP link</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let g of pendingGuests">
+          <td>{{ g.firstName }} {{ g.lastName }}</td>
+          <td>{{ g.groupName || '—' }}</td>
+          <td>{{ g.allowedPlusOne ? 'Yes' : 'No' }}</td>
+          <td>
+            <button class="link-btn" (click)="copyLink(g.token)">
+              {{ copiedToken === g.token ? '✓ Copied!' : 'Copy link' }}
+            </button>
+          </td>
+          <td><button class="del-btn" (click)="deleteGuest(g.id, g.firstName + ' ' + g.lastName)">✕</button></td>
+        </tr>
+        <tr *ngIf="pendingGuests.length === 0">
+          <td colspan="5" class="empty">Everyone has RSVPed! 🎉</td>
         </tr>
       </tbody>
     </table>

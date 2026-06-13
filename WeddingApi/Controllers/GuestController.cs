@@ -163,9 +163,6 @@ public class GuestController : ControllerBase
             IsAttending = g.Rsvp?.IsAttending,
             PlusOneAttending = g.Rsvp?.PlusOneAttending,
             PlusOneName = g.Rsvp?.PlusOneName,
-            MealPreference = g.Rsvp?.MealPreference,
-            PlusOneMeal = g.Rsvp?.PlusOneMealPreference,
-            DietaryRestrictions = g.Rsvp?.DietaryRestrictions,
             Message = g.Rsvp?.Message,
             SubmittedAt = g.Rsvp?.SubmittedAt
         });
@@ -226,9 +223,6 @@ public class GuestController : ControllerBase
             IsAttending = g.Rsvp.IsAttending,
             PlusOneAttending = g.Rsvp.PlusOneAttending,
             PlusOneName = g.Rsvp.PlusOneName,
-            MealPreference = g.Rsvp.MealPreference,
-            PlusOneMealPreference = g.Rsvp.PlusOneMealPreference,
-            DietaryRestrictions = g.Rsvp.DietaryRestrictions,
             Message = g.Rsvp.Message,
             SubmittedAt = g.Rsvp.SubmittedAt
         }

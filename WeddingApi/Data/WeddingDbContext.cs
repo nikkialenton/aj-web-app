@@ -32,9 +32,6 @@ public class WeddingDbContext : DbContext
         {
             e.HasKey(r => r.Id);
             e.Property(r => r.PlusOneName).HasMaxLength(200);
-            e.Property(r => r.MealPreference).HasMaxLength(100);
-            e.Property(r => r.PlusOneMealPreference).HasMaxLength(100);
-            e.Property(r => r.DietaryRestrictions).HasMaxLength(500);
             e.Property(r => r.Message).HasMaxLength(1000);
         });
     }
