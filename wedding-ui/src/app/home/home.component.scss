@@ -169,6 +169,10 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .hero-photo { height: 60vh; }
+}
+
 @media (min-width: 769px) and (max-width: 1024px) {
   .welcome-section {
     padding: 5rem 3rem;
@@ -202,6 +206,8 @@
 }
 
 @media (max-width: 640px) {
+  .hero-photo { height: 40vh; }
+
   .welcome-section {
     padding: 2rem 1.25rem;
   }

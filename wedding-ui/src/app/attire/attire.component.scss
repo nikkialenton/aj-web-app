@@ -145,11 +145,12 @@
 }
 
 @media (max-width: 1024px) {
+  .page-hero { height: 60vh; }
   .attire-grid { gap: 4rem; }
 }
 
 @media (max-width: 640px) {
-  .page-hero { height: 55vh; }
+  .page-hero { height: 40vh; }
   .hero-title { font-size: 28px; top: 5.5rem; white-space: normal; text-align: center; width: 90%; }
   .banner { font-size: 15px; }
   .attire-grid { gap: 2.5rem; }

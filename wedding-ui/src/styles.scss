@@ -193,6 +193,11 @@ h1,h2,h3 { font-family: var(--font-display); font-weight: 400; }
   to   { opacity: 1; }
 }
 
+::selection {
+  background: var(--pink);
+  color: var(--dark);
+}
+
 /* ── UTILITY ── */
 .muted { color: var(--muted); }
 .error { color: var(--error); font-size: 0.9rem; margin: 0.5rem 0; }
