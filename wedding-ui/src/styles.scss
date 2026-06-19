@@ -353,6 +353,28 @@ table {
   margin: 0 0 1rem;
 }
 
+@media (max-width: 640px) {
+  .attend-btns button {
+    font-size: 12px;
+    padding: 10px 6px;
+  }
+
+  .summary-message {
+    max-width: 55vw;
+  }
+
+  .add-fields {
+    grid-template-columns: 1fr;
+    .submit-btn { justify-self: stretch; }
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 * {
   scrollbar-width: thin;
   scrollbar-color: #b8b3aa var(--cream);

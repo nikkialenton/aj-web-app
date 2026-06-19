@@ -98,7 +98,16 @@
     display: block;
     margin: 1rem auto 0;
     width: 400px;
+    max-width: 100%;
     height: auto;
     border-radius: 8px;
   }
+}
+
+@media (max-width: 640px) {
+  .page-hero { height: 55vh; }
+  .hero-title { font-size: 28px; top: 5.5rem; white-space: normal; text-align: center; width: 90%; }
+  .banner { font-size: 15px; }
+  .gifts-content p { font-size: 16px; }
+  .qr-img { width: 100% !important; max-width: 260px; }
 }

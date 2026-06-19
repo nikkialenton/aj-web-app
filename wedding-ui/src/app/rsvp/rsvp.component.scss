@@ -102,3 +102,26 @@
   padding-top: 2rem;
   border-top: 1px solid var(--border);
 }
+
+@media (max-width: 640px) {
+  .page-hero {
+    height: 55vh;
+  }
+
+  .hero-title {
+    font-size: 28px;
+    top: 6rem;
+  }
+
+  .rsvp-wrap {
+    padding: 1.5rem 1rem;
+  }
+
+  .faq-banner {
+    margin: 0 1rem 1.5rem;
+  }
+
+  .faq-item {
+    padding: 0 1rem;
+  }
+}

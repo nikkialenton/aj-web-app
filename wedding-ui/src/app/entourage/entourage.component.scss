@@ -131,3 +131,16 @@
   background: rgba(0,0,0,0.08);
   margin: 0.5rem 0;
 }
+
+@media (max-width: 640px) {
+  .page-hero { height: 55vh; }
+  .hero-title { font-size: 28px; top: 5.5rem; white-space: normal; text-align: center; width: 90%; }
+  .banner { font-size: 15px; }
+  .entourage-list { padding: 0 0.75rem; }
+  .ent-card {
+    padding: 1.5rem 1.25rem;
+    border-radius: 20px;
+    margin: 1rem 0;
+    h2 { font-size: 24px; }
+  }
+}

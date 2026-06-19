@@ -86,3 +86,9 @@
   text-decoration: none;
   &:hover { text-decoration: underline; }
 }
+
+@media (max-width: 640px) {
+  .page-hero { height: 55vh; }
+  .hero-title { font-size: 28px; top: 5.5rem; white-space: normal; text-align: center; width: 90%; }
+  .banner { font-size: 15px; }
+}
