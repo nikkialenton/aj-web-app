@@ -146,7 +146,13 @@
 
 @media (max-width: 1024px) {
   .page-hero { height: 60vh; }
+  .hero-title { font-size: 34px; top: 8rem; }
   .attire-grid { gap: 4rem; }
+}
+
+@media (orientation: landscape) and (max-height: 768px) {
+  .page-hero { height: 50vh; }
+  .hero-title { font-size: 24px; top: 2.5rem; }
 }
 
 @media (max-width: 640px) {

@@ -171,6 +171,16 @@
 
 @media (max-width: 1024px) {
   .hero-photo { height: 60vh; }
+  .monogram-overlay { width: 160px; height: 249px; }
+}
+
+@media (orientation: landscape) and (max-height: 768px) {
+  .hero-photo { height: 50vh; }
+
+  .monogram-overlay {
+    width: 90px;
+    height: 140px;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -207,6 +217,7 @@
 
 @media (max-width: 640px) {
   .hero-photo { height: 40vh; }
+  .monogram-overlay { width: 110px; height: 171px; }
 
   .welcome-section {
     padding: 2rem 1.25rem;
