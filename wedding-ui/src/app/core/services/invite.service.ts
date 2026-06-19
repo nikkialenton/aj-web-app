@@ -5,12 +5,14 @@ const STORAGE_KEY = 'weddingInviteToken';
 
 @Injectable({ providedIn: 'root' })
 export class InviteService {
-  private tokenSubject = new BehaviorSubject<string | null>(sessionStorage.getItem(STORAGE_KEY));
+  private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem(STORAGE_KEY));
   token$ = this.tokenSubject.asObservable();
 
   setToken(token: string): void {
-    sessionStorage.setItem(STORAGE_KEY, token);
-    this.tokenSubject.next(token);
+    if (token !== this.tokenSubject.value) {
+      localStorage.setItem(STORAGE_KEY, token);
+      this.tokenSubject.next(token);
+    }
   }
 
   getToken(): string | null {
@@ -18,7 +20,7 @@ export class InviteService {
   }
 
   clearToken(): void {
-    sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
     this.tokenSubject.next(null);
   }
 }
