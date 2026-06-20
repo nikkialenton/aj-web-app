@@ -1,4 +1,15 @@
-.rsvp-page { background: var(--cream); }
+.rsvp-page {
+  background: var(--cream);
+
+  .state-center:not(.loading-state) {
+    animation: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 @keyframes float-pulse {
   0%, 100% { transform: translateY(0) scale(1); opacity: 0.9; }
@@ -11,6 +22,10 @@
     margin: 0 0 0.75rem;
     animation: float-pulse 1.6s ease-in-out infinite;
   }
+}
+
+.rsvp-form-section textarea {
+  max-height: 200px;
 }
 
 .field > label:first-child {
@@ -84,12 +99,13 @@
 .rsvp-wrap {
   max-width: 530px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 3rem 1.5rem;
+  animation: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .rsvp-deadline {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 
   h3 {
     font-size: 24px;
@@ -232,8 +248,10 @@
 .confirm-btn-send { margin: 0; }
 
 .rsvp-form-section {
-  margin-top: 2rem;
-  padding-top: 2rem;
+  margin-top: 3rem;
+  padding-top: 3rem;
+
+  .field { margin-bottom: 2rem; }
   border-top: 1px solid var(--border);
 }
 
