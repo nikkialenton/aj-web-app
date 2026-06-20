@@ -64,6 +64,14 @@ export class RsvpComponent implements OnInit {
     if (!val) this.form.additionalGuests = this.form.additionalGuests.map(() => '');
   }
 
+  get guestFillState(): 'none' | 'partial' | 'full' {
+    const allowed = this.guest?.allowedGuests ?? 0;
+    const filled = this.filledGuests.length;
+    if (filled === 0) return 'none';
+    if (filled < allowed) return 'partial';
+    return 'full';
+  }
+
   get plusOneLabel(): string {
     const n = this.guest?.allowedGuests ?? 0;
     return n === 1

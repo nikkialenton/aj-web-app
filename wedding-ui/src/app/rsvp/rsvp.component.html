@@ -51,7 +51,7 @@
       </div>
 
       <div class="field">
-        <label>Will you attend?</label>
+        <label>Will you join us in celebration?</label>
         <div class="attend-btns">
           <button [class.sel]="form.isAttending" (click)="setAttending(true)">Joyfully accepts</button>
           <button [class.sel-no]="!form.isAttending" (click)="setAttending(false)">Regretfully declines</button>
@@ -135,11 +135,23 @@
         </div>
       </div>
 
-      <p class="confirm-reminder" *ngIf="form.isAttending && (guest?.allowedGuests ?? 0) > 0">
-        🤍 {{ (guest?.allowedGuests ?? 0) === 1
-          ? "If you have a companion, we'd love to know their name so we can save them a seat. Please include them before submitting your RSVP."
-          : "If you have companions joining you, we'd love to know their names so we can save them seats. Please include them before submitting your RSVP." }}
-      </p>
+      <ng-container *ngIf="form.isAttending && (guest?.allowedGuests ?? 0) > 0">
+
+        <p class="confirm-reminder" *ngIf="guestFillState === 'none'">
+          🤍 {{ (guest?.allowedGuests ?? 0) === 1
+            ? "If you have a companion joining you, we'd love to know their name so we can save them a seat — otherwise, you're all set!"
+            : "If you have companions joining you, we'd love to know their names so we can save them seats — otherwise, you're all set!" }}
+        </p>
+
+        <p class="confirm-reminder" *ngIf="guestFillState === 'partial'">
+          🤍 It looks like not all guest slots are filled. If more guests are joining you, we'd love to save them a seat — otherwise, you're all set!
+        </p>
+
+        <p class="confirm-reminder confirm-reminder--good" *ngIf="guestFillState === 'full'">
+          🌸 We're looking forward to having everyone there!
+        </p>
+
+      </ng-container>
       
 
       <div class="confirm-actions">
