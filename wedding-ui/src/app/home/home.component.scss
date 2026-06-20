@@ -183,6 +183,17 @@
   }
 }
 
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .welcome-section {
+    padding: 5rem 6rem;
+    min-height: unset;
+  }
+
+  .welcome-photo {
+    width: 280px;
+  }
+}
+
 @media (min-width: 769px) and (max-width: 1024px) {
   .welcome-section {
     padding: 5rem 3rem;
