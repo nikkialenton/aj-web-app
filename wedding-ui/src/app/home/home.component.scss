@@ -42,7 +42,7 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr; // photo takes only needed width
   background: rgb(214, 211, 94);
-  min-height: 768px;
+  min-height: 780px;
   padding: 10rem;
 
   gap: 1rem;
@@ -102,7 +102,7 @@
   font-weight: 500;
 
   p {
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.75;
     margin: 0;
   }
