@@ -31,6 +31,7 @@ export class AdminComponent implements OnInit {
   addGuestError = '';
   showAddForm = false;
 
+  selectedMessage: string | null = null;
   editingId: number | null = null;
   editDraft: GuestUpdate = { firstName: '', lastName: '', groupName: '', allowedGuests: 0 };
   editGuestError = '';

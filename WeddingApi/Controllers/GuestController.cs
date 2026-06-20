@@ -79,7 +79,7 @@ public class GuestController : ControllerBase
 
         _db.Guests.Add(guest);
         await _db.SaveChangesAsync();
-        guest.Token = await GenerateUniqueToken(guest.FullName);
+        guest.Token = await GenerateUniqueToken();
         await _db.SaveChangesAsync();
         return Ok(ToAdminDto(guest));
     }
@@ -127,7 +127,7 @@ public class GuestController : ControllerBase
                     AllowedGuests = dto.AllowedGuests,
                     GroupName = dto.GroupName?.Trim() ?? string.Empty
                 };
-                guest.Token = await GenerateUniqueToken(guest.FullName, usedInBatch);
+                guest.Token = await GenerateUniqueToken(usedInBatch);
                 usedInBatch.Add(guest.Token);
                 existingNames.Add(nameKey);
                 _db.Guests.Add(guest);
@@ -225,21 +225,19 @@ public class GuestController : ControllerBase
         return File(bytes, "text/csv", "guest-import-template.csv");
     }
 
-    private async Task<string> GenerateUniqueToken(string fullName, HashSet<string>? reserved = null)
+    private static readonly char[] _tokenChars = "abcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
+
+    private async Task<string> GenerateUniqueToken(HashSet<string>? reserved = null)
     {
-        var slug = new string(fullName.ToLowerInvariant()
-            .Replace(' ', '-')
-            .Where(c => char.IsAsciiLetterOrDigit(c) || c == '-')
-            .ToArray());
-
-        if (!await _db.Guests.AnyAsync(g => g.Token == slug) && (reserved == null || !reserved.Contains(slug)))
-            return slug;
-
-        var suffix = 2;
-        while (await _db.Guests.AnyAsync(g => g.Token == $"{slug}-{suffix}") || (reserved?.Contains($"{slug}-{suffix}") == true))
-            suffix++;
-
-        return $"{slug}-{suffix}";
+        string token;
+        do
+        {
+            token = new string(Enumerable.Range(0, 6)
+                .Select(_ => _tokenChars[Random.Shared.Next(_tokenChars.Length)])
+                .ToArray());
+        }
+        while (await _db.Guests.AnyAsync(g => g.Token == token) || (reserved?.Contains(token) == true));
+        return token;
     }
 
     private bool ValidKey(string? key) =>

@@ -201,8 +201,11 @@
             </ng-container>
             <ng-template #noGuests>—</ng-template>
           </td>
-          <td class="message-cell" [attr.data-tooltip]="g.rsvp!.message || null">
-            <span class="message-truncate">{{ g.rsvp!.message || '—' }}</span>
+          <td>
+            <span *ngIf="g.rsvp!.message" class="message-preview" (click)="selectedMessage = g.rsvp!.message">
+              {{ g.rsvp!.message | slice:0:30 }}{{ g.rsvp!.message.length > 30 ? '…' : '' }}
+            </span>
+            <span *ngIf="!g.rsvp!.message">—</span>
           </td>
           <td>{{ g.rsvp!.submittedAt | date:'mediumDate' }}</td>
         </tr>
@@ -241,5 +244,14 @@
       </tbody>
     </table>
 
+  </div>
+
+  <!-- Message modal -->
+  <div class="msg-overlay" *ngIf="selectedMessage" (click)="selectedMessage = null">
+    <div class="msg-modal" (click)="$event.stopPropagation()">
+      <p class="msg-modal-label">Guest message</p>
+      <p class="msg-modal-body">{{ selectedMessage }}</p>
+      <button class="msg-modal-close" (click)="selectedMessage = null">✕ Close</button>
+    </div>
   </div>
 </section>
