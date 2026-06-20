@@ -6,8 +6,9 @@
   </div>
 
   <!-- Loading -->
-  <div class="state-center" *ngIf="state === 'loading'">
-    <p class="muted">Finding your invitation…</p>
+  <div class="state-center loading-state" *ngIf="showLoading">
+    <p class="loading-icon">💌</p>
+    <p class="muted">Preparing your invitation…</p>
   </div>
 
   <!-- Not found -->
@@ -132,16 +133,16 @@
     </div>
   </div>
 
-      <div class="faq-banner">FREQUENTLY ASKED QUESTIONS ❓</div>
-    <div class="faq-item">
+      <div class="faq-banner" *ngIf="state !== 'loading'">FREQUENTLY ASKED QUESTIONS ❓</div>
+    <div class="faq-item" *ngIf="state !== 'loading'">
       <div class="faq-label">⏰ Arrival Time</div>
       <div class="faq-body">We recommend arriving by 2:30 PM so you can get settled before the ceremony begins.</div>
     </div>
-    <div class="faq-item">
+    <div class="faq-item" *ngIf="state !== 'loading'">
       <div class="faq-label">🎁 Gifts</div>
       <div class="faq-body">Your presence is the greatest gift of all. If you'd like to bless us further, a little envelope for our future together would be greatly appreciated. 🤍</div>
     </div>
-    <div class="faq-item">
+    <div class="faq-item" *ngIf="state !== 'loading'">
       <div class="faq-label">🤍 A Gentle Reminder</div>
       <div class="faq-body">Due to limited venue capacity, kindly ask that only guests named on the invitation attend. Our celebration will be adults-only. Thank you for your understanding.</div>
     </div>
