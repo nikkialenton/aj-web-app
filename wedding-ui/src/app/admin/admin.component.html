@@ -202,8 +202,8 @@
             <ng-template #noGuests>—</ng-template>
           </td>
           <td>
-            <span *ngIf="g.rsvp!.message" class="message-preview" (click)="selectedMessage = g.rsvp!.message">
-              {{ g.rsvp!.message | slice:0:30 }}{{ g.rsvp!.message.length > 30 ? '…' : '' }}
+            <span *ngIf="g.rsvp!.message" class="message-preview" (click)="selectedMessage = { text: g.rsvp!.message, from: g.firstName + ' ' + g.lastName }">
+              {{ g.rsvp!.message | slice:0:30 }}{{ g.rsvp!.message.length > 40 ? '…' : '' }}
             </span>
             <span *ngIf="!g.rsvp!.message">—</span>
           </td>
@@ -246,12 +246,11 @@
 
   </div>
 
-  <!-- Message modal -->
-  <div class="msg-overlay" *ngIf="selectedMessage" (click)="selectedMessage = null">
-    <div class="msg-modal" (click)="$event.stopPropagation()">
-      <p class="msg-modal-label">Guest message</p>
-      <p class="msg-modal-body">{{ selectedMessage }}</p>
-      <button class="msg-modal-close" (click)="selectedMessage = null">✕ Close</button>
-    </div>
-  </div>
+  <!-- Message letter -->
+  <app-message-letter
+    *ngIf="selectedMessage"
+    [message]="selectedMessage.text"
+    [guestName]="selectedMessage.from"
+    (close)="selectedMessage = null">
+  </app-message-letter>
 </section>

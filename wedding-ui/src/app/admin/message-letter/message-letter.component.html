@@ -1,0 +1,21 @@
+<div class="letter-overlay" [class.closing]="isClosing" (click)="dismiss()">
+  <div class="letter" [class.closing]="isClosing" (click)="$event.stopPropagation()">
+
+    <div class="letter-top-ornament">✦</div>
+
+    <p class="letter-eyebrow">a little note from</p>
+    <h3 class="letter-name">{{ guestName }}</h3>
+
+    <div class="letter-divider">
+      <span class="letter-divider-line"></span>
+      <span class="letter-divider-flower">❀</span>
+      <span class="letter-divider-line"></span>
+    </div>
+
+    <p class="letter-body">{{ message }}</p>
+
+    <div class="letter-bottom-ornament">✦</div>
+    
+    <button class="letter-close" (click)="dismiss()">close</button>
+  </div>
+</div>

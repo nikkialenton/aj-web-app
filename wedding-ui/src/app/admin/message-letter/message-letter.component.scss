@@ -1,0 +1,129 @@
+.letter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+
+  &.closing { animation: fadeOut 0.25s ease forwards; }
+}
+
+.letter {
+  background: #faf7f0;
+  border-radius: 2px;
+  padding: 2.5rem 2.25rem 2rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 20px 40px rgba(0,0,0,0.12);
+  animation: slideUp 0.25s ease;
+
+  &.closing { animation: slideDown 0.25s ease forwards; }
+
+  // subtle lined paper feel
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    #e8e2d6 28px
+  );
+  background-position: 0 52px;
+}
+
+.letter-top-ornament,
+.letter-bottom-ornament {
+  font-size: 11px;
+  color: #c9b99a;
+  letter-spacing: 0.2em;
+}
+
+.letter-top-ornament { margin-bottom: 1rem; }
+.letter-bottom-ornament { margin-top: 1.25rem; }
+
+.letter-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a8967e;
+  margin: 0 0 0.35rem;
+}
+
+.letter-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: #3d3028;
+  margin: 0 0 1rem;
+}
+
+.letter-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+
+  .letter-divider-line {
+    flex: 1;
+    height: 1px;
+    background: #d4c4ae;
+  }
+
+  .letter-divider-flower {
+    font-size: 13px;
+    color: #c9a87c;
+  }
+}
+
+.letter-body {
+  font-size: 14px;
+  line-height: 1.9;
+  color: #4a3f35;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+  margin: 0;
+  font-style: italic;
+}
+
+.letter-close {
+  margin-top: 1.5rem;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #a8967e;
+  cursor: pointer;
+  padding: 4px 0;
+  border-bottom: 1px solid #d4c4ae;
+  transition: color 0.2s, border-color 0.2s;
+
+  &:hover {
+    color: #3d3028;
+    border-color: #3d3028;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(0);    opacity: 1; }
+  to   { transform: translateY(16px); opacity: 0; }
+}

@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { GuestService } from '../core/services/guest.service';
 import { GuestAdmin, GuestCreate, GuestUpdate, AdminStats } from '../core/models/models';
 import { environment } from '../../environments/environment';
+import { MessageLetterComponent } from './message-letter/message-letter.component';
 
 type AdminView = 'guests' | 'rsvps' | 'pending';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MessageLetterComponent],
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
@@ -31,7 +32,7 @@ export class AdminComponent implements OnInit {
   addGuestError = '';
   showAddForm = false;
 
-  selectedMessage: string | null = null;
+  selectedMessage: { text: string; from: string } | null = null;
   editingId: number | null = null;
   editDraft: GuestUpdate = { firstName: '', lastName: '', groupName: '', allowedGuests: 0 };
   editGuestError = '';
@@ -45,7 +46,15 @@ export class AdminComponent implements OnInit {
 
   constructor(private guestService: GuestService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (sessionStorage.getItem('admin_session') === 'true') {
+      this.loading = true;
+      this.guestService.getStats().subscribe({
+        next: (s) => { this.stats = s; this.loggedIn = true; this.loadGuests(); },
+        error: () => { sessionStorage.removeItem('admin_session'); this.loading = false; }
+      });
+    }
+  }
 
   login() {
     const match = environment.adminUsers.find(
@@ -58,7 +67,7 @@ export class AdminComponent implements OnInit {
     this.loginError = '';
     this.loading = true;
     this.guestService.getStats().subscribe({
-      next: (s) => { this.stats = s; this.loggedIn = true; this.loadGuests(); },
+      next: (s) => { this.stats = s; this.loggedIn = true; sessionStorage.setItem('admin_session', 'true'); this.loadGuests(); },
       error: () => { this.loginError = 'Could not connect to server.'; this.loading = false; }
     });
   }
@@ -226,6 +235,7 @@ export class AdminComponent implements OnInit {
 
   logout() {
     this.loggedIn = false;
+    sessionStorage.removeItem('admin_session');
     this.username = '';
     this.password = '';
     this.showPassword = false;
