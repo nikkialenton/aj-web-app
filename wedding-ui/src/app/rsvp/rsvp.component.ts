@@ -64,6 +64,13 @@ export class RsvpComponent implements OnInit {
     if (!val) this.form.additionalGuests = this.form.additionalGuests.map(() => '');
   }
 
+  get plusOneLabel(): string {
+    const n = this.guest?.allowedGuests ?? 0;
+    return n === 1
+      ? "You're welcome to bring a guest 🤍"
+      : `You're welcome to bring up to ${n} guests 🤍`;
+  }
+
   get filledGuests(): string[] {
     return this.form.additionalGuests.filter(n => n.trim().length > 0);
   }

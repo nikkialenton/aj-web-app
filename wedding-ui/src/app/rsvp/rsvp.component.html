@@ -60,10 +60,19 @@
 
       <ng-container *ngIf="form.isAttending && (guest?.allowedGuests ?? 0) > 0">
         <div class="plus-one-section">
-          <p class="plus-one-label">You're welcome to bring up to {{ guest?.allowedGuests }} guest(s) 🤍</p>
-          <div class="field" *ngFor="let i of guestSlots; trackBy: trackByIndex">
-            <label>Guest {{ i + 1 }} name <span class="optional">(optional)</span></label>
-            <input type="text" maxlength="50" [(ngModel)]="form.additionalGuests[i]" placeholder="Full name" />
+          <p class="plus-one-label">{{ plusOneLabel }}</p>
+          <p class="plus-one-hint">
+            {{ (guest?.allowedGuests ?? 0) === 1
+              ? "We'd love to know their name so we can save them a seat."
+              : "We'd love to know their names so we can save them seats." }}
+          </p>
+          <div class="seat-card" *ngFor="let i of guestSlots; trackBy: trackByIndex">
+            <div class="seat-header">
+              <span class="seat-icon">🌿</span>
+              <span class="seat-label">Seat {{ i + 1 }}</span>
+            </div>
+            <input type="text" maxlength="50" [(ngModel)]="form.additionalGuests[i]"
+              placeholder="Guest's full name (optional)" class="seat-input" />
           </div>
         </div>
       </ng-container>
@@ -116,7 +125,7 @@
               <ng-container *ngIf="filledGuests.length > 0; else noNames">
                 <span *ngFor="let n of filledGuests" class="confirm-guest-pill">{{ n }}</span>
               </ng-container>
-              <ng-template #noNames><span class="confirm-muted">None</span></ng-template>
+              <ng-template #noNames><span class="confirm-muted">Coming alone — no additional guests</span></ng-template>
             </span>
           </div>
         </ng-container>
@@ -125,6 +134,13 @@
           <span class="confirm-message">{{ form.message }}</span>
         </div>
       </div>
+
+      <p class="confirm-reminder" *ngIf="form.isAttending && (guest?.allowedGuests ?? 0) > 0">
+        🤍 {{ (guest?.allowedGuests ?? 0) === 1
+          ? "If you have a companion, we'd love to know their name so we can save them a seat. Please include them before submitting your RSVP."
+          : "If you have companions joining you, we'd love to know their names so we can save them seats. Please include them before submitting your RSVP." }}
+      </p>
+      
 
       <div class="confirm-actions">
         <button class="confirm-btn-back" (click)="closeConfirm()">Go back &amp; edit</button>
