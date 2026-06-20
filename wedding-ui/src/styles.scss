@@ -300,19 +300,19 @@ table {
 
 .del-btn {
   background: none; border: none; cursor: pointer;
-  color: var(--muted); font-size: 12px; padding: 4px 8px;
+  color: var(--muted); font-size: 13px; padding: 4px 8px;
   border-radius: 4px; transition: color 0.2s;
   &:hover { color: #a32d2d; }
 }
 .edit-btn {
   background: none; border: none; cursor: pointer;
-  color: var(--muted); font-size: 14px; padding: 4px 8px;
+  color: var(--muted); font-size: 13px; padding: 4px 8px;
   border-radius: 4px; transition: color 0.2s;
   &:hover { color: var(--dark); }
 }
 .save-btn {
   background: none; border: none; cursor: pointer;
-  color: #2d7a3a; font-size: 14px; padding: 4px 8px;
+  color: #2d7a3a; font-size: 13px; padding: 4px 8px;
   border-radius: 4px; transition: color 0.2s;
   &:hover { color: #1a5228; }
 }
