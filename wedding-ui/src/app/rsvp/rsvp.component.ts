@@ -21,11 +21,11 @@ export class RsvpComponent implements OnInit {
   submittedRsvp: RsvpView | null = null;
   submitError = '';
   submitting = false;
+  showConfirm = false;
 
   form: RsvpCreate = {
     isAttending: true,
-    plusOneAttending: undefined,
-    plusOneName: '',
+    additionalGuests: [],
     message: ''
   };
 
@@ -38,6 +38,7 @@ export class RsvpComponent implements OnInit {
     this.rsvpService.lookup(this.token).subscribe({
       next: (guest) => {
         this.guest = guest;
+        this.form.additionalGuests = Array(guest.allowedGuests).fill('');
         if (guest.hasRsvped) {
           this.submittedRsvp = guest.existingRsvp!;
           this.state = 'already-submitted';
@@ -51,18 +52,29 @@ export class RsvpComponent implements OnInit {
 
   setAttending(val: boolean) {
     this.form.isAttending = val;
-    if (!val) {
-      this.form.plusOneAttending = undefined;
-      this.form.plusOneName = '';
-    }
+    if (!val) this.form.additionalGuests = this.form.additionalGuests.map(() => '');
   }
 
-  setPlusOne(val: boolean) {
-    this.form.plusOneAttending = val;
-    if (!val) this.form.plusOneName = '';
+  get filledGuests(): string[] {
+    return this.form.additionalGuests.filter(n => n.trim().length > 0);
+  }
+
+  get guestSlots(): number[] {
+    return Array.from({ length: this.guest?.allowedGuests ?? 0 }, (_, i) => i);
+  }
+
+  trackByIndex(index: number): number { return index; }
+
+  openConfirm() {
+    this.showConfirm = true;
+  }
+
+  closeConfirm() {
+    this.showConfirm = false;
   }
 
   submit() {
+    this.showConfirm = false;
     this.submitting = true;
     this.submitError = '';
     this.rsvpService.submit(this.token, this.form).subscribe({

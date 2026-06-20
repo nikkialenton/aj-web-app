@@ -1,23 +1,21 @@
 export interface GuestLookup {
   firstName: string;
   lastName: string;
-  allowedPlusOne: boolean;
+  allowedGuests: number;
   hasRsvped: boolean;
   existingRsvp?: RsvpView;
 }
 
 export interface RsvpView {
   isAttending: boolean;
-  plusOneAttending?: boolean;
-  plusOneName: string;
+  additionalGuests: string[];
   message: string;
   submittedAt: string;
 }
 
 export interface RsvpCreate {
   isAttending: boolean;
-  plusOneAttending?: boolean;
-  plusOneName: string;
+  additionalGuests: string[];
   message: string;
 }
 
@@ -27,7 +25,7 @@ export interface GuestAdmin {
   lastName: string;
   email: string;
   token: string;
-  allowedPlusOne: boolean;
+  allowedGuests: number;
   groupName: string;
   hasRsvped: boolean;
   rsvp?: RsvpView;
@@ -37,8 +35,15 @@ export interface GuestCreate {
   firstName: string;
   lastName: string;
   email: string;
-  allowedPlusOne: boolean;
+  allowedGuests: number;
   groupName: string;
+}
+
+export interface GuestUpdate {
+  firstName: string;
+  lastName: string;
+  groupName: string;
+  allowedGuests: number;
 }
 
 export interface AdminStats {

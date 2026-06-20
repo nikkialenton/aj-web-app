@@ -14,6 +14,9 @@
 
   <!-- Dashboard -->
   <div *ngIf="loggedIn">
+    <datalist id="group-options">
+      <option *ngFor="let g of groupOptions" [value]="g"></option>
+    </datalist>
 
     <!-- Stats -->
     <div class="stat-row">
@@ -32,30 +35,43 @@
         <input type="file" accept=".csv" (change)="onFileSelected($event)" hidden />
       </label>
       <button class="tool-btn" (click)="exportCsv()">⬇ Download Current Data as CSV</button>
+      <button class="tool-btn" (click)="refresh()">↻ Refresh</button>
       <span class="import-status" *ngIf="importStatus">{{ importStatus }}</span>
     </div>
 
     <!-- Add guest form -->
     <div class="add-form" *ngIf="showAddForm">
-      <datalist id="group-options">
-        <option *ngFor="let g of groupOptions" [value]="g"></option>
-      </datalist>
       <div class="add-fields">
-        <input type="text" [(ngModel)]="newGuest.firstName" placeholder="First name *" [class.input-error]="addGuestError && !newGuest.firstName" />
-        <input type="text" [(ngModel)]="newGuest.lastName" placeholder="Last name *" [class.input-error]="addGuestError && !newGuest.lastName" />
-        <input type="text" [(ngModel)]="newGuest.groupName" placeholder="Group *" list="group-options" [class.input-error]="addGuestError && !newGuest.groupName" />
-        <input type="email" [(ngModel)]="newGuest.email" placeholder="Email (optional)" />
-        <label class="checkbox-label">
-          <input type="checkbox" [(ngModel)]="newGuest.allowedPlusOne" />
-          Allow +1
-        </label>
+        <div class="float-field" [class.input-error]="addGuestError && !newGuest.firstName">
+          <input type="text" [(ngModel)]="newGuest.firstName" placeholder=" " />
+          <label>First name *</label>
+        </div>
+        <div class="float-field" [class.input-error]="addGuestError && !newGuest.lastName">
+          <input type="text" [(ngModel)]="newGuest.lastName" placeholder=" " />
+          <label>Last name *</label>
+        </div>
+        <div class="float-field" [class.input-error]="addGuestError && !newGuest.groupName">
+          <input type="text" [(ngModel)]="newGuest.groupName" placeholder=" " list="group-options" />
+          <label>Group *</label>
+        </div>
+        <div class="float-field">
+          <input type="email" [(ngModel)]="newGuest.email" placeholder=" " />
+          <label>Email (optional)</label>
+        </div>
+        <div class="float-field">
+          <input type="number" [(ngModel)]="newGuest.allowedGuests" placeholder=" " min="0" max="10" />
+          <label>Guest slots</label>
+        </div>
         <button class="submit-btn small" (click)="addGuest()">Add Guest</button>
       </div>
       <p class="add-error" *ngIf="addGuestError">{{ addGuestError }}</p>
     </div>
 
+    <!-- Loading indicator -->
+    <div class="refresh-loading" *ngIf="loading">Refreshing…</div>
+
     <!-- Tabs -->
-    <div class="tabs">
+    <div class="tabs" *ngIf="!loading">
       <button [class.active]="view === 'guests'" (click)="view = 'guests'">All guests ({{ guests.length }})</button>
       <button [class.active]="view === 'rsvps'" (click)="view = 'rsvps'">RSVPs ({{ rsvpedGuests.length }})</button>
       <button [class.active]="view === 'pending'" (click)="view = 'pending'">Pending ({{ pendingGuests.length }})</button>
@@ -67,7 +83,7 @@
         <tr>
           <th>Name</th>
           <th>Group</th>
-          <th>+1</th>
+          <th>Guests</th>
           <th>Status</th>
           <th>RSVP link</th>
           <th></th>
@@ -75,23 +91,71 @@
       </thead>
       <tbody>
         <tr *ngFor="let g of guests">
-          <td>{{ g.firstName }} {{ g.lastName }}</td>
-          <td>{{ g.groupName || '—' }}</td>
-          <td>{{ g.allowedPlusOne ? 'Yes' : 'No' }}</td>
-          <td>
-            <span class="badge"
-              [class.yes]="g.rsvp?.isAttending"
-              [class.no]="g.hasRsvped && !g.rsvp?.isAttending"
-              [class.pending]="!g.hasRsvped">
-              {{ g.hasRsvped ? (g.rsvp?.isAttending ? 'Attending' : 'Declined') : 'Pending' }}
-            </span>
-          </td>
-          <td>
-            <button class="link-btn" (click)="copyLink(g.token)">
-              {{ copiedToken === g.token ? '✓ Copied!' : 'Copy link' }}
-            </button>
-          </td>
-          <td><button class="del-btn" (click)="deleteGuest(g.id, g.firstName + ' ' + g.lastName)">✕</button></td>
+          <ng-container *ngIf="editingId === g.id; else viewRow">
+            <td>
+              <div class="float-field" [class.input-error]="editGuestError && !editDraft.firstName?.trim()">
+                <input class="inline-input" [(ngModel)]="editDraft.firstName" placeholder=" " />
+                <label>First name *</label>
+              </div>
+              <div class="float-field" style="margin-top:6px" [class.input-error]="editGuestError && !editDraft.lastName?.trim()">
+                <input class="inline-input" [(ngModel)]="editDraft.lastName" placeholder=" " />
+                <label>Last name *</label>
+              </div>
+              <p class="add-error" *ngIf="editGuestError">{{ editGuestError }}</p>
+            </td>
+            <td>
+              <div class="float-field" [class.input-error]="editGuestError && !editDraft.groupName?.trim()">
+                <input class="inline-input" [(ngModel)]="editDraft.groupName" placeholder=" " list="group-options" />
+                <label>Group *</label>
+              </div>
+            </td>
+            <td>
+              <ng-container *ngIf="g.hasRsvped; else editSlots">
+                <span class="locked-value" data-tooltip="Cannot change — guest already RSVPed">{{ g.allowedGuests }}</span>
+              </ng-container>
+              <ng-template #editSlots>
+                <div class="float-field">
+                  <input class="inline-input inline-input--narrow" type="number" min="0" max="10" [(ngModel)]="editDraft.allowedGuests" placeholder=" " />
+                  <label>Slots</label>
+                </div>
+              </ng-template>
+            </td>
+            <td>
+              <span class="badge"
+                [class.yes]="g.rsvp?.isAttending"
+                [class.no]="g.hasRsvped && !g.rsvp?.isAttending"
+                [class.pending]="!g.hasRsvped">
+                {{ g.hasRsvped ? (g.rsvp?.isAttending ? 'Attending' : 'Declined') : 'Pending' }}
+              </span>
+            </td>
+            <td></td>
+            <td class="edit-actions">
+              <button class="save-btn" data-tooltip="Save changes" (click)="saveEdit(g.id)" [disabled]="saving">{{ saving ? 'Saving…' : '✓ Save' }}</button>
+              <button class="del-btn" data-tooltip="Cancel" (click)="cancelEdit()" [disabled]="saving">✕ Cancel</button>
+            </td>
+          </ng-container>
+          <ng-template #viewRow>
+            <td>{{ g.firstName }} {{ g.lastName }}</td>
+            <td>{{ g.groupName || '—' }}</td>
+            <td>{{ g.allowedGuests }}</td>
+            <td>
+              <span class="badge"
+                [class.yes]="g.rsvp?.isAttending"
+                [class.no]="g.hasRsvped && !g.rsvp?.isAttending"
+                [class.pending]="!g.hasRsvped">
+                {{ g.hasRsvped ? (g.rsvp?.isAttending ? 'Attending' : 'Declined') : 'Pending' }}
+              </span>
+            </td>
+            <td>
+              <button class="link-btn" (click)="copyLink(g.token)">
+                {{ copiedToken === g.token ? '✓ Copied!' : 'Copy link' }}
+              </button>
+            </td>
+            <td class="edit-actions">
+              <button class="edit-btn" data-tooltip="Edit guest" (click)="startEdit(g)">✎ Edit</button>
+              <button class="del-btn" data-tooltip="Remove guest" (click)="deleteGuest(g.id, g.firstName + ' ' + g.lastName, g.hasRsvped)">✕ Remove</button>
+            </td>
+          </ng-template>
         </tr>
         <tr *ngIf="guests.length === 0">
           <td colspan="6" class="empty">No guests yet. Add one above or import a CSV.</td>
@@ -105,7 +169,7 @@
         <tr>
           <th>Name</th>
           <th>Attending</th>
-          <th>+1 name</th>
+          <th>Additional guests</th>
           <th>Message</th>
           <th>Submitted</th>
         </tr>
@@ -114,7 +178,12 @@
         <tr *ngFor="let g of rsvpedGuests">
           <td>{{ g.firstName }} {{ g.lastName }}</td>
           <td><span class="badge" [class.yes]="g.rsvp!.isAttending" [class.no]="!g.rsvp!.isAttending">{{ g.rsvp!.isAttending ? 'Yes' : 'No' }}</span></td>
-          <td>{{ g.rsvp!.plusOneName || '—' }}</td>
+          <td>
+            <ng-container *ngIf="g.rsvp!.additionalGuests?.length; else noGuests">
+              <span class="guest-pill" *ngFor="let name of g.rsvp!.additionalGuests">{{ name }}</span>
+            </ng-container>
+            <ng-template #noGuests>—</ng-template>
+          </td>
           <td class="message-cell" [attr.data-tooltip]="g.rsvp!.message || null">
             <span class="message-truncate">{{ g.rsvp!.message || '—' }}</span>
           </td>
@@ -132,7 +201,7 @@
         <tr>
           <th>Name</th>
           <th>Group</th>
-          <th>+1</th>
+          <th>Guests</th>
           <th>RSVP link</th>
           <th></th>
         </tr>
@@ -141,13 +210,13 @@
         <tr *ngFor="let g of pendingGuests">
           <td>{{ g.firstName }} {{ g.lastName }}</td>
           <td>{{ g.groupName || '—' }}</td>
-          <td>{{ g.allowedPlusOne ? 'Yes' : 'No' }}</td>
+          <td>{{ g.allowedGuests }}</td>
           <td>
             <button class="link-btn" (click)="copyLink(g.token)">
               {{ copiedToken === g.token ? '✓ Copied!' : 'Copy link' }}
             </button>
           </td>
-          <td><button class="del-btn" (click)="deleteGuest(g.id, g.firstName + ' ' + g.lastName)">✕</button></td>
+          <td><button class="del-btn" data-tooltip="Remove guest" (click)="deleteGuest(g.id, g.firstName + ' ' + g.lastName, g.hasRsvped)">✕ Remove</button></td>
         </tr>
         <tr *ngIf="pendingGuests.length === 0">
           <td colspan="5" class="empty">Everyone has RSVPed! 🎉</td>

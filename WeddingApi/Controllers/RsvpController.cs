@@ -20,6 +20,7 @@ public class RsvpController : ControllerBase
     {
         var guest = await _db.Guests
             .Include(g => g.Rsvp)
+                .ThenInclude(r => r!.AdditionalGuests)
             .FirstOrDefaultAsync(g => g.Token == token);
 
         if (guest == null)
@@ -29,7 +30,7 @@ public class RsvpController : ControllerBase
         {
             FirstName = guest.FirstName,
             LastName = guest.LastName,
-            AllowedPlusOne = guest.AllowedPlusOne,
+            AllowedGuests = guest.AllowedGuests,
             HasRsvped = guest.Rsvp != null,
             ExistingRsvp = guest.Rsvp == null ? null : MapRsvpView(guest.Rsvp)
         });
@@ -53,11 +54,18 @@ public class RsvpController : ControllerBase
         {
             GuestId = guest.Id,
             IsAttending = dto.IsAttending,
-            PlusOneAttending = guest.AllowedPlusOne ? dto.PlusOneAttending : null,
-            PlusOneName = guest.AllowedPlusOne ? dto.PlusOneName : string.Empty,
             Message = dto.Message,
             SubmittedAt = DateTime.UtcNow
         };
+
+        if (dto.IsAttending)
+        {
+            rsvp.AdditionalGuests = dto.AdditionalGuests
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Take(guest.AllowedGuests)
+                .Select(n => new AdditionalGuest { Name = n.Trim() })
+                .ToList();
+        }
 
         _db.Rsvps.Add(rsvp);
         await _db.SaveChangesAsync();
@@ -68,8 +76,7 @@ public class RsvpController : ControllerBase
     private static RsvpViewDto MapRsvpView(Rsvp r) => new()
     {
         IsAttending = r.IsAttending,
-        PlusOneAttending = r.PlusOneAttending,
-        PlusOneName = r.PlusOneName,
+        AdditionalGuests = r.AdditionalGuests.Select(a => a.Name).ToList(),
         Message = r.Message,
         SubmittedAt = r.SubmittedAt
     };

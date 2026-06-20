@@ -32,7 +32,7 @@
       </ng-container>
     </div>
     <div class="readonly-card">
-      <ng-container *ngTemplateOutlet="rsvpSummary; context: { rsvp: submittedRsvp, allowedPlusOne: guest?.allowedPlusOne }"></ng-container>
+      <ng-container *ngTemplateOutlet="rsvpSummary; context: { rsvp: submittedRsvp, allowedGuests: guest?.allowedGuests }"></ng-container>
     </div>
   </div>
 
@@ -42,7 +42,7 @@
       <h3>💌 Kindly RSVP by <u>August 1, 2026</u></h3>
       <p>We would be grateful for your response as we finalize the details of our special day. 🤍</p>
     </div>
-    
+
     <div class="rsvp-form-section">
       <div class="section-head" style="margin-bottom:1.5rem">
         <h2>Hello, {{ guest?.firstName }} 👋</h2>
@@ -57,22 +57,13 @@
         </div>
       </div>
 
-      <ng-container *ngIf="form.isAttending">
-        <div class="plus-one-section" *ngIf="guest?.allowedPlusOne">
-          <p class="plus-one-label">You're welcome to bring a guest 🤍</p>
-          <div class="field">
-            <label>Will your plus one be joining?</label>
-            <div class="attend-btns">
-              <button [class.sel]="form.plusOneAttending === true" (click)="setPlusOne(true)">Yes, joining</button>
-              <button [class.sel]="form.plusOneAttending === false" (click)="setPlusOne(false)">No, just me</button>
-            </div>
+      <ng-container *ngIf="form.isAttending && (guest?.allowedGuests ?? 0) > 0">
+        <div class="plus-one-section">
+          <p class="plus-one-label">You're welcome to bring up to {{ guest?.allowedGuests }} guest(s) 🤍</p>
+          <div class="field" *ngFor="let i of guestSlots; trackBy: trackByIndex">
+            <label>Guest {{ i + 1 }} name <span class="optional">(optional)</span></label>
+            <input type="text" maxlength="50" [(ngModel)]="form.additionalGuests[i]" placeholder="Full name" />
           </div>
-          <ng-container *ngIf="form.plusOneAttending === true">
-            <div class="field">
-              <label>Plus one's name</label>
-              <input type="text" maxlength="50" [(ngModel)]="form.plusOneName" placeholder="Full name" />
-            </div>
-          </ng-container>
         </div>
       </ng-container>
 
@@ -83,7 +74,7 @@
       </div>
 
       <p class="error" *ngIf="submitError">{{ submitError }}</p>
-      <button class="submit-btn" (click)="submit()" [disabled]="submitting">
+      <button class="submit-btn" (click)="openConfirm()" [disabled]="submitting">
         {{ submitting ? 'Sending…' : 'Send my RSVP 💌' }}
       </button>
     </div>
@@ -98,7 +89,45 @@
       <p *ngIf="!submittedRsvp.isAttending">Your RSVP has been received. We're sorry you can't make it, but we appreciate you letting us know. 🤍</p>
     </div>
     <div class="readonly-card">
-      <ng-container *ngTemplateOutlet="rsvpSummary; context: { rsvp: submittedRsvp, allowedPlusOne: guest?.allowedPlusOne }"></ng-container>
+      <ng-container *ngTemplateOutlet="rsvpSummary; context: { rsvp: submittedRsvp, allowedGuests: guest?.allowedGuests }"></ng-container>
+    </div>
+  </div>
+
+  <!-- Confirm modal -->
+  <div class="confirm-overlay" *ngIf="showConfirm" (click)="closeConfirm()">
+    <div class="confirm-modal" (click)="$event.stopPropagation()">
+      <p class="confirm-icon">{{ form.isAttending ? '🎉' : '🌿' }}</p>
+      <h3 class="confirm-title">Just to confirm…</h3>
+      <p class="confirm-sub">Almost there! Take a quick peek at your RSVP before sending it off. If anything changes later, just let us know and we'll be happy to help. 💌</p>
+
+      <div class="confirm-rows">
+        <div class="confirm-row">
+          <span class="confirm-label">Attendance</span>
+          <span class="badge" [class.yes]="form.isAttending" [class.no]="!form.isAttending">
+            {{ form.isAttending ? 'Joyfully attending 🎊' : 'Regretfully declining' }}
+          </span>
+        </div>
+        <ng-container *ngIf="form.isAttending && (guest?.allowedGuests ?? 0) > 0">
+          <div class="confirm-row">
+            <span class="confirm-label">Additional guests</span>
+            <span>
+              <ng-container *ngIf="filledGuests.length > 0; else noNames">
+                <span *ngFor="let n of filledGuests" class="confirm-guest-pill">{{ n }}</span>
+              </ng-container>
+              <ng-template #noNames><span class="confirm-muted">None</span></ng-template>
+            </span>
+          </div>
+        </ng-container>
+        <div class="confirm-row" *ngIf="form.message">
+          <span class="confirm-label">Message</span>
+          <span class="confirm-message">{{ form.message }}</span>
+        </div>
+      </div>
+
+      <div class="confirm-actions">
+        <button class="confirm-btn-back" (click)="closeConfirm()">Go back &amp; edit</button>
+        <button class="submit-btn confirm-btn-send" (click)="submit()">Yes, send it! 💌</button>
+      </div>
     </div>
   </div>
 
@@ -116,20 +145,18 @@
       <div class="faq-body">Due to limited venue capacity, kindly ask that only guests named on the invitation attend. Our celebration will be adults-only. Thank you for your understanding.</div>
     </div>
 </div>
-<ng-template #rsvpSummary let-rsvp="rsvp" let-allowedPlusOne="allowedPlusOne">
+<ng-template #rsvpSummary let-rsvp="rsvp" let-allowedGuests="allowedGuests">
   <div class="summary-row">
     <span class="summary-label">Attendance</span>
     <span class="badge" [class.yes]="rsvp.isAttending" [class.no]="!rsvp.isAttending">
       {{ rsvp.isAttending ? 'Attending' : 'Not attending' }}
     </span>
   </div>
-  <ng-container *ngIf="rsvp.isAttending">
-    <ng-container *ngIf="allowedPlusOne">
-      <div class="summary-row">
-        <span class="summary-label">Plus one</span>
-        <span>{{ rsvp.plusOneAttending ? (rsvp.plusOneName || 'Yes') : 'Not joining' }}</span>
-      </div>
-    </ng-container>
+  <ng-container *ngIf="rsvp.isAttending && allowedGuests > 0">
+    <div class="summary-row">
+      <span class="summary-label">Additional guests</span>
+      <span>{{ rsvp.additionalGuests?.length ? rsvp.additionalGuests.join(', ') : 'None' }}</span>
+    </div>
   </ng-container>
   <div class="summary-row" *ngIf="rsvp.message">
     <span class="summary-label">Message</span>

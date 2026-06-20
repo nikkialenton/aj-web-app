@@ -28,7 +28,8 @@ public class GuestController : ControllerBase
     {
         if (!ValidKey(key)) return Unauthorized();
 
-        var guests = await _db.Guests.Include(g => g.Rsvp)
+        var guests = await _db.Guests
+            .Include(g => g.Rsvp).ThenInclude(r => r!.AdditionalGuests)
             .OrderBy(g => g.GroupName).ThenBy(g => g.LastName).ThenBy(g => g.FirstName)
             .ToListAsync();
 
@@ -41,7 +42,9 @@ public class GuestController : ControllerBase
     {
         if (!ValidKey(key)) return Unauthorized();
 
-        var guests = await _db.Guests.Include(g => g.Rsvp).ToListAsync();
+        var guests = await _db.Guests
+            .Include(g => g.Rsvp).ThenInclude(r => r!.AdditionalGuests)
+            .ToListAsync();
         var rsvped = guests.Where(g => g.Rsvp != null).ToList();
         var attending = rsvped.Where(g => g.Rsvp!.IsAttending).ToList();
 
@@ -53,7 +56,7 @@ public class GuestController : ControllerBase
             Attending = attending.Count,
             Declined = rsvped.Count - attending.Count,
             TotalAttending = attending.Count
-                + attending.Count(g => g.Rsvp!.PlusOneAttending == true)
+                + attending.Sum(g => g.Rsvp!.AdditionalGuests.Count())
         });
     }
 
@@ -70,7 +73,7 @@ public class GuestController : ControllerBase
             FirstName = dto.FirstName.Trim(),
             LastName = dto.LastName.Trim(),
             Email = dto.Email.Trim().ToLower(),
-            AllowedPlusOne = dto.AllowedPlusOne,
+            AllowedGuests = dto.AllowedGuests,
             GroupName = dto.GroupName.Trim()
         };
 
@@ -82,7 +85,7 @@ public class GuestController : ControllerBase
     }
 
     // POST /api/guests/import — bulk CSV upload
-    // CSV columns: FullName, Email, AllowedPlusOne (true/false), GroupName
+    // CSV columns: FirstName, LastName, Email, AllowedGuests (number), GroupName
     [HttpPost("import")]
     public async Task<IActionResult> Import(
         [FromHeader(Name = "X-Admin-Key")] string? key,
@@ -111,7 +114,7 @@ public class GuestController : ControllerBase
                 FirstName = dto.FirstName.Trim(),
                 LastName = dto.LastName.Trim(),
                 Email = dto.Email?.Trim().ToLower() ?? string.Empty,
-                AllowedPlusOne = dto.AllowedPlusOne,
+                AllowedGuests = dto.AllowedGuests,
                 GroupName = dto.GroupName?.Trim() ?? string.Empty
             };
             _db.Guests.Add(guest);
@@ -127,6 +130,29 @@ public class GuestController : ControllerBase
         }
         await _db.SaveChangesAsync();
         return Ok(new { imported = added.Count });
+    }
+
+    // PUT /api/guests/{id} — update name and allowed guests
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(
+        int id,
+        [FromHeader(Name = "X-Admin-Key")] string? key,
+        [FromBody] GuestUpdateDto dto)
+    {
+        if (!ValidKey(key)) return Unauthorized();
+        if (string.IsNullOrWhiteSpace(dto.FirstName) || string.IsNullOrWhiteSpace(dto.LastName))
+            return BadRequest(new { error = "First name and last name are required." });
+
+        var guest = await _db.Guests.Include(g => g.Rsvp).FirstOrDefaultAsync(g => g.Id == id);
+        if (guest == null) return NotFound();
+
+        guest.FirstName = dto.FirstName.Trim();
+        guest.LastName = dto.LastName.Trim();
+        guest.GroupName = dto.GroupName.Trim();
+        guest.AllowedGuests = dto.AllowedGuests;
+        await _db.SaveChangesAsync();
+
+        return Ok(ToAdminDto(guest));
     }
 
     // DELETE /api/guests/{id}
@@ -149,7 +175,8 @@ public class GuestController : ControllerBase
     {
         if (!ValidKey(key)) return Unauthorized();
 
-        var guests = await _db.Guests.Include(g => g.Rsvp)
+        var guests = await _db.Guests
+            .Include(g => g.Rsvp).ThenInclude(r => r!.AdditionalGuests)
             .OrderBy(g => g.LastName).ThenBy(g => g.FirstName).ToListAsync();
 
         var rows = guests.Select(g => new
@@ -158,11 +185,10 @@ public class GuestController : ControllerBase
             g.LastName,
             g.Email,
             g.GroupName,
-            g.AllowedPlusOne,
+            g.AllowedGuests,
             HasRsvped = g.Rsvp != null,
             IsAttending = g.Rsvp?.IsAttending,
-            PlusOneAttending = g.Rsvp?.PlusOneAttending,
-            PlusOneName = g.Rsvp?.PlusOneName,
+            AdditionalGuests = g.Rsvp != null ? string.Join(", ", g.Rsvp.AdditionalGuests.Select(a => a.Name)) : null,
             Message = g.Rsvp?.Message,
             SubmittedAt = g.Rsvp?.SubmittedAt
         });
@@ -181,9 +207,9 @@ public class GuestController : ControllerBase
     public IActionResult Template([FromHeader(Name = "X-Admin-Key")] string? key)
     {
         if (!ValidKey(key)) return Unauthorized();
-        var csv = "FirstName,LastName,Email,AllowedPlusOne,GroupName\n" +
-                  "Maria,Santos,maria@email.com,true,Family\n" +
-                  "Jose,Reyes,jose@email.com,false,Work\n";
+        var csv = "FirstName,LastName,Email,AllowedGuests,GroupName\n" +
+                  "Maria,Santos,maria@email.com,1,Family\n" +
+                  "Jose,Reyes,jose@email.com,0,Work\n";
         var bytes = System.Text.Encoding.UTF8.GetBytes(csv);
         return File(bytes, "text/csv", "guest-import-template.csv");
     }
@@ -215,14 +241,13 @@ public class GuestController : ControllerBase
         LastName = g.LastName,
         Email = g.Email,
         Token = g.Token,
-        AllowedPlusOne = g.AllowedPlusOne,
+        AllowedGuests = g.AllowedGuests,
         GroupName = g.GroupName,
         HasRsvped = g.Rsvp != null,
         Rsvp = g.Rsvp == null ? null : new RsvpViewDto
         {
             IsAttending = g.Rsvp.IsAttending,
-            PlusOneAttending = g.Rsvp.PlusOneAttending,
-            PlusOneName = g.Rsvp.PlusOneName,
+            AdditionalGuests = g.Rsvp.AdditionalGuests.Select(a => a.Name).ToList(),
             Message = g.Rsvp.Message,
             SubmittedAt = g.Rsvp.SubmittedAt
         }

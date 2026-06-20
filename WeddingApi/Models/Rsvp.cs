@@ -7,8 +7,8 @@ public class Rsvp
     public Guest Guest { get; set; } = null!;
 
     public bool IsAttending { get; set; }
-    public bool? PlusOneAttending { get; set; }   // null = no +1 allowed
-    public string PlusOneName { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
+
+    public ICollection<AdditionalGuest> AdditionalGuests { get; set; } = [];
     public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
 }

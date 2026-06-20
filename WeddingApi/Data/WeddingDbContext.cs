@@ -9,6 +9,7 @@ public class WeddingDbContext : DbContext
 
     public DbSet<Guest> Guests => Set<Guest>();
     public DbSet<Rsvp> Rsvps => Set<Rsvp>();
+    public DbSet<AdditionalGuest> AdditionalGuests => Set<AdditionalGuest>();
 
     protected override void OnModelCreating(ModelBuilder m)
     {
@@ -31,8 +32,17 @@ public class WeddingDbContext : DbContext
         m.Entity<Rsvp>(e =>
         {
             e.HasKey(r => r.Id);
-            e.Property(r => r.PlusOneName).HasMaxLength(200);
             e.Property(r => r.Message).HasMaxLength(1000);
+            e.HasMany(r => r.AdditionalGuests)
+             .WithOne(a => a.Rsvp)
+             .HasForeignKey(a => a.RsvpId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        m.Entity<AdditionalGuest>(e =>
+        {
+            e.HasKey(a => a.Id);
+            e.Property(a => a.Name).HasMaxLength(100).IsRequired();
         });
     }
 }

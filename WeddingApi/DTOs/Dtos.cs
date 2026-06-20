@@ -5,7 +5,7 @@ public class GuestLookupDto
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
-    public bool AllowedPlusOne { get; set; }
+    public int AllowedGuests { get; set; }
     public bool HasRsvped { get; set; }
     public RsvpViewDto? ExistingRsvp { get; set; }
 }
@@ -14,8 +14,7 @@ public class GuestLookupDto
 public class RsvpViewDto
 {
     public bool IsAttending { get; set; }
-    public bool? PlusOneAttending { get; set; }
-    public string PlusOneName { get; set; } = string.Empty;
+    public List<string> AdditionalGuests { get; set; } = [];
     public string Message { get; set; } = string.Empty;
     public DateTime SubmittedAt { get; set; }
 }
@@ -24,8 +23,7 @@ public class RsvpViewDto
 public class RsvpCreateDto
 {
     public bool IsAttending { get; set; }
-    public bool? PlusOneAttending { get; set; }
-    public string PlusOneName { get; set; } = string.Empty;
+    public List<string> AdditionalGuests { get; set; } = [];
     public string Message { get; set; } = string.Empty;
 }
 
@@ -35,7 +33,7 @@ public class GuestCreateDto
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public bool AllowedPlusOne { get; set; }
+    public int AllowedGuests { get; set; }
     public string GroupName { get; set; } = string.Empty;
 }
 
@@ -47,10 +45,19 @@ public class GuestAdminDto
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Token { get; set; } = string.Empty;
-    public bool AllowedPlusOne { get; set; }
+    public int AllowedGuests { get; set; }
     public string GroupName { get; set; } = string.Empty;
     public bool HasRsvped { get; set; }
     public RsvpViewDto? Rsvp { get; set; }
+}
+
+// Admin — update a guest's name and allowed guests
+public class GuestUpdateDto
+{
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string GroupName { get; set; } = string.Empty;
+    public int AllowedGuests { get; set; }
 }
 
 // Admin stats
@@ -61,5 +68,5 @@ public class AdminStatsDto
     public int PendingCount { get; set; }
     public int Attending { get; set; }
     public int Declined { get; set; }
-    public int TotalAttending { get; set; } // guests + plus ones
+    public int TotalAttending { get; set; } // guests + additional guests
 }

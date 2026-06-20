@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { GuestAdmin, GuestCreate, AdminStats } from '../models/models';
+import { GuestAdmin, GuestCreate, GuestUpdate, AdminStats } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class GuestService {
@@ -20,6 +20,10 @@ export class GuestService {
 
   create(dto: GuestCreate): Observable<GuestAdmin> {
     return this.http.post<GuestAdmin>(`${this.api}/guests`, dto, { headers: this.h() });
+  }
+
+  update(id: number, dto: GuestUpdate): Observable<GuestAdmin> {
+    return this.http.put<GuestAdmin>(`${this.api}/guests/${id}`, dto, { headers: this.h() });
   }
 
   delete(id: number): Observable<void> {
