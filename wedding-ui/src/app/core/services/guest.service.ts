@@ -30,10 +30,10 @@ export class GuestService {
     return this.http.delete<void>(`${this.api}/guests/${id}`, { headers: this.h() });
   }
 
-  importCsv(file: File): Observable<{ imported: number }> {
+  importCsv(file: File): Observable<{ imported: number; skipped: number }> {
     const form = new FormData();
     form.append('file', file);
-    return this.http.post<{ imported: number }>(`${this.api}/guests/import`, form, { headers: this.h() });
+    return this.http.post<{ imported: number; skipped: number }>(`${this.api}/guests/import`, form, { headers: this.h() });
   }
 
   exportCsv(): void {

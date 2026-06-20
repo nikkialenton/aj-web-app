@@ -32,11 +32,11 @@
 
     <!-- Stats -->
     <div class="stat-row">
-      <div class="stat" data-tooltip="Total number of guests on the list"><div class="stat-n">{{ stats.totalGuests }}</div><div class="stat-l">Guests invited</div></div>
-      <div class="stat" data-tooltip="Guests who have submitted their RSVP (attending or not)"><div class="stat-n">{{ stats.rsvpedCount }}</div><div class="stat-l">RSVPed</div></div>
-      <div class="stat" data-tooltip="Guests who haven't responded yet"><div class="stat-n">{{ stats.pendingCount }}</div><div class="stat-l">Pending</div></div>
-      <div class="stat" data-tooltip="Primary guests who said yes (not counting their plus-ones)"><div class="stat-n">{{ stats.attending }}</div><div class="stat-l">Attending</div></div>
-      <div class="stat" data-tooltip="Total headcount including additional guests brought by primaries"><div class="stat-n">{{ stats.totalAttending }}</div><div class="stat-l">Total seats</div></div>
+      <div class="stat stat--link" data-tooltip="Total number of guests on the list" (click)="view = 'guests'"><div class="stat-n">{{ stats.totalGuests }}</div><div class="stat-l">Guests invited</div></div>
+      <div class="stat stat--link" data-tooltip="Guests who have submitted their RSVP (attending or not)" (click)="view = 'rsvps'; rsvpFilter = 'all'"><div class="stat-n">{{ stats.rsvpedCount }}</div><div class="stat-l">RSVPed</div></div>
+      <div class="stat stat--link" data-tooltip="Guests who haven't responded yet" (click)="view = 'pending'"><div class="stat-n">{{ stats.pendingCount }}</div><div class="stat-l">Pending</div></div>
+      <div class="stat stat--link" data-tooltip="Primary guests who said yes (not counting their plus-ones)" (click)="view = 'rsvps'; rsvpFilter = 'attending'"><div class="stat-n">{{ stats.attending }}</div><div class="stat-l">Attending</div></div>
+      <div class="stat stat--link" data-tooltip="Total headcount including additional guests brought by primaries" (click)="view = 'rsvps'; rsvpFilter = 'attending'"><div class="stat-n">{{ stats.totalAttending }}</div><div class="stat-l">Total seats</div></div>
     </div>
 
     <!-- Toolbar -->
@@ -86,7 +86,7 @@
     <!-- Tabs -->
     <div class="tabs" *ngIf="!loading">
       <button [class.active]="view === 'guests'" (click)="view = 'guests'">All guests ({{ guests.length }})</button>
-      <button [class.active]="view === 'rsvps'" (click)="view = 'rsvps'">RSVPs ({{ rsvpedGuests.length }})</button>
+      <button [class.active]="view === 'rsvps'" (click)="view = 'rsvps'; rsvpFilter = 'all'">RSVPs ({{ rsvpedGuests.length }})</button>
       <button [class.active]="view === 'pending'" (click)="view = 'pending'">Pending ({{ pendingGuests.length }})</button>
     </div>
 
@@ -94,16 +94,16 @@
     <table class="rsvp-table" *ngIf="view === 'guests'">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Group</th>
-          <th>Guests</th>
-          <th>Status</th>
+          <th class="sortable" (click)="setGuestSort('name')">Name{{ guestIcon('name') }}</th>
+          <th class="sortable" (click)="setGuestSort('group')">Group{{ guestIcon('group') }}</th>
+          <th class="sortable" (click)="setGuestSort('guests')">Guests{{ guestIcon('guests') }}</th>
+          <th class="sortable" (click)="setGuestSort('status')">Status{{ guestIcon('status') }}</th>
           <th>RSVP link</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let g of guests">
+        <tr *ngFor="let g of sortedGuests">
           <ng-container *ngIf="editingId === g.id; else viewRow">
             <td>
               <div class="float-field" [class.input-error]="editGuestError && !editDraft.firstName?.trim()">
@@ -177,18 +177,22 @@
     </table>
 
     <!-- RSVP details view -->
+    <div class="rsvp-filter-bar" *ngIf="view === 'rsvps' && rsvpFilter !== 'all'">
+      Showing: <strong>{{ rsvpFilter === 'attending' ? 'Attending only' : 'Declined only' }}</strong>
+      <button class="clear-filter-btn" (click)="rsvpFilter = 'all'">✕ Show all</button>
+    </div>
     <table class="rsvp-table" *ngIf="view === 'rsvps'">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Attending</th>
+          <th class="sortable" (click)="setRsvpSort('name')">Name{{ rsvpIcon('name') }}</th>
+          <th class="sortable" (click)="setRsvpSort('attending')">Attending{{ rsvpIcon('attending') }}</th>
           <th>Additional guests</th>
           <th>Message</th>
-          <th>Submitted</th>
+          <th class="sortable" (click)="setRsvpSort('submitted')">Submitted{{ rsvpIcon('submitted') }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let g of rsvpedGuests">
+        <tr *ngFor="let g of sortedRsvpedGuests">
           <td>{{ g.firstName }} {{ g.lastName }}</td>
           <td><span class="badge" [class.yes]="g.rsvp!.isAttending" [class.no]="!g.rsvp!.isAttending">{{ g.rsvp!.isAttending ? 'Yes' : 'No' }}</span></td>
           <td>
@@ -212,15 +216,15 @@
     <table class="rsvp-table" *ngIf="view === 'pending'">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Group</th>
-          <th>Guests</th>
+          <th class="sortable" (click)="setGuestSort('name')">Name{{ guestIcon('name') }}</th>
+          <th class="sortable" (click)="setGuestSort('group')">Group{{ guestIcon('group') }}</th>
+          <th class="sortable" (click)="setGuestSort('guests')">Guests{{ guestIcon('guests') }}</th>
           <th>RSVP link</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let g of pendingGuests">
+        <tr *ngFor="let g of sortedPendingGuests">
           <td>{{ g.firstName }} {{ g.lastName }}</td>
           <td>{{ g.groupName || '—' }}</td>
           <td>{{ g.allowedGuests }}</td>

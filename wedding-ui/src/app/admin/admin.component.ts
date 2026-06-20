@@ -36,6 +36,12 @@ export class AdminComponent implements OnInit {
   editGuestError = '';
   saving = false;
 
+  guestSortCol = 'name';
+  guestSortDir: 1 | -1 = 1;
+  rsvpSortCol = 'name';
+  rsvpSortDir: 1 | -1 = 1;
+  rsvpFilter: 'all' | 'attending' | 'declined' = 'all';
+
   constructor(private guestService: GuestService) {}
 
   ngOnInit() {}
@@ -105,20 +111,70 @@ export class AdminComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
+    input.value = '';
     this.importStatus = 'Importing…';
     this.guestService.importCsv(file).subscribe({
       next: (r) => {
-        this.importStatus = `${r.imported} guests imported!`;
+        this.importStatus = r.skipped
+          ? `${r.imported} guests imported, ${r.skipped} skipped (already exist).`
+          : `${r.imported} guests imported!`;
         this.loadGuests();
         this.guestService.getStats().subscribe(s => this.stats = s);
         setTimeout(() => this.importStatus = '', 4000);
       },
-      error: () => { this.importStatus = 'Import failed. Check your CSV format.'; }
+      error: (err) => { this.importStatus = err?.error?.error ?? 'Import failed. Check your CSV format.'; }
     });
   }
 
   get rsvpedGuests() { return this.guests.filter(g => g.hasRsvped); }
   get pendingGuests() { return this.guests.filter(g => !g.hasRsvped); }
+
+  setGuestSort(col: string) {
+    this.guestSortDir = this.guestSortCol === col ? (-this.guestSortDir as 1 | -1) : 1;
+    this.guestSortCol = col;
+  }
+  setRsvpSort(col: string) {
+    this.rsvpSortDir = this.rsvpSortCol === col ? (-this.rsvpSortDir as 1 | -1) : 1;
+    this.rsvpSortCol = col;
+  }
+  guestIcon(col: string) { return this.guestSortCol === col ? (this.guestSortDir === 1 ? ' ↑' : ' ↓') : ''; }
+  rsvpIcon(col: string)  { return this.rsvpSortCol  === col ? (this.rsvpSortDir  === 1 ? ' ↑' : ' ↓') : ''; }
+
+  private sortedBy<T>(arr: T[], _col: string, dir: 1 | -1, key: (x: T) => string | number): T[] {
+    return [...arr].sort((a, b) => {
+      const av = key(a), bv = key(b);
+      return (av < bv ? -1 : av > bv ? 1 : 0) * dir;
+    });
+  }
+
+  get sortedGuests() {
+    return this.sortedBy(this.guests, this.guestSortCol, this.guestSortDir, g => ({
+      name: `${g.firstName} ${g.lastName}`.toLowerCase(),
+      group: (g.groupName || '').toLowerCase(),
+      guests: g.allowedGuests,
+      status: g.hasRsvped ? (g.rsvp?.isAttending ? 0 : 1) : 2,
+    }[this.guestSortCol] ?? ''));
+  }
+  get filteredRsvpedGuests() {
+    if (this.rsvpFilter === 'attending') return this.rsvpedGuests.filter(g => g.rsvp?.isAttending);
+    if (this.rsvpFilter === 'declined')  return this.rsvpedGuests.filter(g => !g.rsvp?.isAttending);
+    return this.rsvpedGuests;
+  }
+  get sortedRsvpedGuests() {
+    return this.sortedBy(this.filteredRsvpedGuests, this.rsvpSortCol, this.rsvpSortDir, g => ({
+      name: `${g.firstName} ${g.lastName}`.toLowerCase(),
+      attending: g.rsvp?.isAttending ? 0 : 1,
+      submitted: new Date(g.rsvp!.submittedAt).getTime(),
+    }[this.rsvpSortCol] ?? ''));
+  }
+  get sortedPendingGuests() {
+    return this.sortedBy(this.pendingGuests, this.guestSortCol, this.guestSortDir, g => ({
+      name: `${g.firstName} ${g.lastName}`.toLowerCase(),
+      group: (g.groupName || '').toLowerCase(),
+      guests: g.allowedGuests,
+    }[this.guestSortCol] ?? ''));
+  }
+
   get groupOptions() {
     return [...new Set(this.guests.map(g => g.groupName).filter(Boolean))].sort();
   }

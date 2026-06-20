@@ -100,36 +100,47 @@ public class GuestController : ControllerBase
             MissingFieldFound = null
         };
 
-        using var reader = new StreamReader(file.OpenReadStream());
-        using var csv = new CsvReader(reader, config);
-
-        var records = csv.GetRecords<GuestCreateDto>().ToList();
-        var added = new List<Guest>();
-
-        foreach (var dto in records)
+        try
         {
-            if (string.IsNullOrWhiteSpace(dto.FirstName)) continue;
-            var guest = new Guest
+            using var reader = new StreamReader(file.OpenReadStream());
+            using var csv = new CsvReader(reader, config);
+
+            var records = csv.GetRecords<GuestCreateDto>().ToList();
+            var added = new List<Guest>();
+            var skipped = 0;
+            var usedInBatch = new HashSet<string>();
+
+            var existingNames = (await _db.Guests
+                .Select(g => g.FirstName.ToLower() + "|" + g.LastName.ToLower())
+                .ToListAsync()).ToHashSet();
+
+            foreach (var dto in records)
             {
-                FirstName = dto.FirstName.Trim(),
-                LastName = dto.LastName.Trim(),
-                Email = dto.Email?.Trim().ToLower() ?? string.Empty,
-                AllowedGuests = dto.AllowedGuests,
-                GroupName = dto.GroupName?.Trim() ?? string.Empty
-            };
-            _db.Guests.Add(guest);
-            added.Add(guest);
-        }
+                if (string.IsNullOrWhiteSpace(dto.FirstName)) continue;
+                var nameKey = (dto.FirstName?.Trim() ?? "").ToLower() + "|" + (dto.LastName?.Trim() ?? "").ToLower();
+                if (existingNames.Contains(nameKey)) { skipped++; continue; }
+                var guest = new Guest
+                {
+                    FirstName = dto.FirstName.Trim(),
+                    LastName = dto.LastName.Trim(),
+                    Email = dto.Email?.Trim().ToLower() ?? string.Empty,
+                    AllowedGuests = dto.AllowedGuests,
+                    GroupName = dto.GroupName?.Trim() ?? string.Empty
+                };
+                guest.Token = await GenerateUniqueToken(guest.FullName, usedInBatch);
+                usedInBatch.Add(guest.Token);
+                existingNames.Add(nameKey);
+                _db.Guests.Add(guest);
+                added.Add(guest);
+            }
 
-        await _db.SaveChangesAsync();
-        var usedInBatch = new HashSet<string>();
-        foreach (var g in added)
-        {
-            g.Token = await GenerateUniqueToken(g.FullName, usedInBatch);
-            usedInBatch.Add(g.Token);
+            await _db.SaveChangesAsync();
+            return Ok(new { imported = added.Count, skipped });
         }
-        await _db.SaveChangesAsync();
-        return Ok(new { imported = added.Count });
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     // PUT /api/guests/{id} — update name and allowed guests

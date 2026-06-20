@@ -21,6 +21,35 @@
   &:last-child { margin-bottom: 0; }
 }
 
+.rsvp-filter-bar {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  strong { color: var(--dark); }
+}
+
+.clear-filter-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  color: var(--muted);
+  &:hover { color: var(--dark); border-color: var(--dark); }
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  &:hover { color: var(--dark); }
+}
+
 .float-field {
   position: relative;
 
