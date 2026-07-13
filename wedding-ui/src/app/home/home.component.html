@@ -1,42 +1,80 @@
 <section class="home-page">
 
 
-  <div class="hero-photo photo-placeholder">
-    <img src="assets/photos/hero.png" alt="Arbie and Jerzey">
+  <div class="hero-yellow">
+
+    <!-- Scattered flowers -->
+    <img class="flower f-pink"   src="assets/photos/flower_pink.png"   alt="">
+    <img class="flower f-purple" src="assets/photos/flower_purple.png" alt="">
+    <img class="flower f-leaf"   src="assets/photos/leaf_green.png"    alt="">
+    <img class="flower f-orange" src="assets/photos/flower_orange.png" alt="">
+    <img class="flower f-yellow" src="assets/photos/flower_yellow.png" alt="">
+    <img class="flower f-blue"   src="assets/photos/flower_blue.png"   alt="">
+    <svg class="hero-tagline-svg" viewBox="0 0 500 100" xmlns="http://www.w3.org/2000/svg">
+      <path id="tagline-arc" d="M 60,90 Q 250,20 440,90" fill="none"/>
+      <text>
+        <textPath href="#tagline-arc" startOffset="50%" text-anchor="middle">
+          TOGETHER WITH LOVE AND JOY
+        </textPath>
+      </text>
+    </svg>
 
     <div class="hero-overlay">
-      <svg class="hero-tagline-svg" viewBox="0 0 500 100" xmlns="http://www.w3.org/2000/svg">
-        <path id="tagline-arc" d="M 20,90 Q 250,10 480,90" fill="none"/>
-        <text>
-          <textPath href="#tagline-arc" startOffset="50%" text-anchor="middle">
-            TOGETHER WITH LOVE AND JOY
-          </textPath>
-        </text>
-      </svg>
-
-      <div class="hero-names">
-        <span class="hero-name-line">Arbie</span>
-        <span class="hero-amp">&</span>
-        <span class="hero-name-line">Jerzey</span>
+      <div class="hero-top">
+        <div class="hero-names">
+          <span class="hero-name-line">Arbie</span>
+          <span class="hero-amp">&</span>
+          <span class="hero-name-line">Jerzey</span>
+        </div>
+        <p class="hero-invite">INVITE YOU TO CELEBRATE THEIR MARRIAGE ON</p>
+        <p class="hero-date">28 AUGUST 2026</p>
       </div>
 
-      <p class="hero-invite">INVITE YOU TO CELEBRATE THEIR MARRIAGE ON</p>
-      <p class="hero-date">28 AUGUST 2026</p>
-
-      <div class="hero-venues">
-        <div class="hero-venue">
-          <p class="venue-label">CEREMONY AT 3 PM</p>
-          <p class="venue-name">SAN ROQUE PARISH</p>
-          <p class="venue-sub">CHURCH CORDOVA CEBU</p>
+      <div class="hero-bottom">
+        <div class="venue-divider-flowers">
+          <img src="assets/photos/flower_pink.png" alt="">
+          <img src="assets/photos/flower_purple.png" alt="">
         </div>
-        <div class="hero-venue hero-venue--right">
-          <p class="venue-label">RECEPTION TO FOLLOW AT</p>
-          <p class="venue-name">GLASS TENT</p>
-          <p class="venue-sub">SOLEA MACTAN RESORT</p>
+        <div class="hero-venues">
+          <div class="hero-venue">
+            <p class="venue-label">CEREMONY AT 3 PM</p>
+            <p class="venue-name">SAN ROQUE PARISH</p>
+            <p class="venue-sub">CHURCH CORDOVA CEBU</p>
+          </div>
+          <div class="hero-venue hero-venue--right">
+            <p class="venue-label">RECEPTION TO FOLLOW AT</p>
+            <p class="venue-name">GLASS TENT</p>
+            <p class="venue-sub">SOLEA MACTAN RESORT</p>
+          </div>
         </div>
       </div>
     </div>
 
+  </div><!-- end hero-yellow -->
+
+  <!-- Since 2016 section -->
+  <div class="story-section">
+    <div class="story-text">
+      <h2 class="story-year">since 2016</h2>
+      <p>Jerzey and Arbie's story began in high school as classmates who seemed like complete opposites. They had different personalities, interests, and circles of friends, making them the least likely pair to end up together.</p>
+      <p>Jerzey took up Architecture and loves details and planning everything out. Arbie studied Marine Transportation and is the calm, easygoing one who keeps things steady when life gets a little chaotic. Somehow, their differences turned out to be the perfect match. ❤️</p>
+    </div>
+    <div class="story-photo photo-placeholder" appScrollReveal>
+      <img src="assets/photos/welcome-photo.png" alt="Arbie and Jerzey">
+    </div>
+  </div>
+
+  <!-- Decade section -->
+  <div class="decade-section">
+    <video class="decade-video" autoplay muted loop playsinline>
+      <source src="assets/videos/decade.mp4" type="video/mp4">
+      <source src="assets/videos/decade.webm" type="video/webm">
+    </video>
+    <div class="decade-overlay">
+      <h2 class="decade-heading">a decade in<br>the making</h2>
+      <p>What started with a simple confession soon turned into a love story that survived years of long distance, countless calls, and a whole lot of choosing each other every day.</p>
+      <p>And the best part? On their wedding day, they are not only saying "I do," but also celebrating 10 years together. Talk about perfect timing! ❤️</p>
+    </div>
   </div>
 
   <!-- Welcome section -->

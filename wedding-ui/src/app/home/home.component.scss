@@ -1,18 +1,28 @@
 .home-page { background: var(--cream); }
 
-.hero-photo {
-  height: 80vh;
+.hero-yellow {
   position: relative;
+  height: 80vh;
+  min-height: 560px;
+  background: rgb(255, 228, 123);
   overflow: hidden;
-  background: linear-gradient(160deg, #c8d8b0, #7a9a62);
+}
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: scale(1.3);
-    object-position: center 10%;  // 10% from the top
-    object-position: center 20%;  // a bit lower
+.flower {
+  position: absolute;
+  width: 50px;
+  pointer-events: none;
+  user-select: none;
+
+  &.f-pink   { top: 22%; left: calc(50% - 350px); }
+  &.f-purple { top: 20%; left: calc(50% + 220px); }
+  &.f-leaf   { top: 47%; left: calc(50% - 400px); }
+  &.f-orange { top: 48%; left: calc(50% + 350px); }
+  &.f-yellow { bottom: 18%; left: calc(50% - 280px); }
+  &.f-blue   { bottom: 20%; left: calc(50% + 200px); }
+
+  @media (max-width: 768px) {
+    display: none;
   }
 }
 
@@ -29,22 +39,54 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem 2rem;
+  padding: 8rem 2rem 2rem;
   animation: hero-content-enter 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.hero-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-bottom {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    position: static;
+    margin-top: 1.5rem;
+  }
 }
 
 .hero-tagline-svg {
   position: absolute;
-  top: 6%;
+  top: 4%;
   left: 50%;
   transform: translateX(-50%);
-  width: 520px;
-  max-width: 90vw;
+  width: 460px;
+  max-width: 88vw;
+  z-index: 3;
+
+  @media (max-width: 768px) {
+    width: 300px;
+    top: 2%;
+  }
+
+  @media (max-width: 480px) {
+    width: 240px;
+    top: 1%;
+  }
 
   text {
     font-size: 20px;
-    letter-spacing: 0.22em;
-    fill: rgba(255,255,255,0.9);
+    letter-spacing: 0.14em;
+    fill: rgba(255, 255, 255, 0.85);
     font-family: var(--font-body);
     font-weight: 500;
     text-transform: uppercase;
@@ -61,10 +103,14 @@
 
 .hero-name-line {
   font-family: var(--font-display);
-  font-size: clamp(72px, 12vw, 140px);
+  font-size: clamp(72px, 12vw, 120px);
   color: #fff;
   text-transform: none;
   grid-column: 1;
+
+  &:first-child { padding-left: 3.5rem; }
+
+  @media (max-width: 480px) { font-size: clamp(48px, 14vw, 72px); }
 }
 
 .hero-amp {
@@ -75,14 +121,18 @@
   grid-row: 1 / 3;
   align-self: center;
   padding-left: 0.15em;
+
+  @media (max-width: 480px) { font-size: clamp(22px, 6vw, 32px); }
 }
 
 .hero-invite {
   font-size: 14px;
+  font-weight: 700;
   letter-spacing: 0.2em;
-  color: rgba(255,255,255,0.8);
+  color: #fff;
   text-transform: uppercase;
   margin: 2.5rem 0 0.4rem;
+  text-align: center;
 }
 
 .hero-date {
@@ -95,30 +145,49 @@
 }
 
 .hero-venues {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 0;
-  right: 0;
   display: flex;
   justify-content: center;
   gap: 50rem;
+  width: 100%;
+
+  @media (max-width: 1280px) { gap: 20rem; }
+  @media (max-width: 1024px) { gap: 8rem; }
+  @media (max-width: 768px)  {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
 }
 
 .hero-venue {
   text-align: center;
 }
 
+.venue-divider-flowers {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0.5rem 0;
+
+    img { width: 28px; }
+  }
+}
+
 .venue-label {
   font-size: 13px;
+  font-weight: 400;
   letter-spacing: 0.18em;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.8);
   text-transform: uppercase;
   margin: 0 0 0.3rem;
 }
 
 .venue-name {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.14em;
   color: #fff;
   text-transform: uppercase;
@@ -127,12 +196,111 @@
 
 .venue-sub {
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.14em;
-  color: #fff;
+  color: rgba(255,255,255,0.9);
   text-transform: uppercase;
   margin: 0;
 }
+
+.story-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--yellow);
+  min-height: 600px;
+  align-items: center;
+  gap: 3rem;
+  padding: 5rem 6rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: 3rem 2rem;
+    min-height: unset;
+  }
+}
+
+.story-text {
+  color: rgb(23, 98, 81);
+  text-align: center;
+
+  p {
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0 0 1.25rem;
+  }
+}
+
+.story-year {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 6vw, 72px);
+  color: rgb(23, 98, 81);
+  margin: 0 0 2rem;
+  font-weight: 400;
+}
+
+.story-photo {
+  aspect-ratio: 4 / 3;
+  border-radius: 4px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.decade-section {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.decade-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.decade-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.55) 45%, transparent 75%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 4rem 5rem;
+  max-width: 55%;
+  color: #fff;
+
+  p {
+    font-size: 15px;
+    line-height: 1.75;
+    margin: 0 0 1rem;
+    max-width: 500px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 3rem 2rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 60%, transparent 100%);
+  }
+}
+
+.decade-heading {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 400;
+  color: #fff;
+  margin: 0 0 1.5rem;
+  line-height: 1.05;
+}
+
 .welcome-section {
   display: grid;
   grid-template-columns: 1fr auto 1fr; // photo takes only needed width
@@ -265,13 +433,12 @@
 }
 
 @media (max-width: 1024px) {
-  .hero-photo { height: 60vh; }
+  .hero-yellow { height: 60vh; }
 }
 
 @media (orientation: landscape) and (max-height: 768px) {
-  .hero-photo { height: 50vh; }
+  .hero-yellow { height: 50vh; }
   .hero-venues { bottom: 1rem; padding: 0 1.5rem; }
-  .hero-tagline { margin-bottom: 0.75rem; }
 }
 
 @media (min-width: 1025px) and (max-width: 1366px) {
@@ -318,9 +485,8 @@
 }
 
 @media (max-width: 640px) {
-  .hero-photo { height: 100svh; }
+  .hero-yellow { height: 100svh; }
   .hero-venues { padding: 0 1.25rem; bottom: 1.5rem; }
-  .hero-tagline { display: none; }
 
   .welcome-section {
     padding: 2rem 1.25rem;
