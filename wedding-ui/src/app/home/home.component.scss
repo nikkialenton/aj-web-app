@@ -204,42 +204,57 @@
 }
 
 .story-section {
+  background: rgb(214, 211, 94);
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+}
+
+.story-inner {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: var(--yellow);
-  min-height: 600px;
+  grid-template-columns: 1fr 1.6fr;
   align-items: center;
   gap: 3rem;
-  padding: 5rem 6rem;
+  width: 100%;
+  max-width: 1100px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    padding: 3rem 2rem;
-    min-height: unset;
   }
 }
 
 .story-text {
-  color: rgb(23, 98, 81);
-  text-align: center;
+  color: rgb(59, 90, 38);
+  text-align: right;
+  max-width: 400px;
+  margin-left: auto;
 
   p {
-    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
     line-height: 1.8;
     margin: 0 0 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    text-align: center;
+    margin: 0 auto;
   }
 }
 
 .story-year {
   font-family: var(--font-display);
-  font-size: clamp(42px, 6vw, 72px);
-  color: rgb(23, 98, 81);
-  margin: 0 0 2rem;
+  font-size: clamp(28px, 3.5vw, 42px);
+  color: rgb(59, 90, 38);
+  margin: 0 0 1rem;
   font-weight: 400;
 }
 
 .story-photo {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
   border-radius: 4px;
   overflow: hidden;
 
@@ -328,7 +343,7 @@
   h2 {
     font-family: var(--font-display);
     font-size: 50px;
-    color: rgb(23, 98, 81);
+    color: rgb(59, 90, 38);
     line-height: 1.15;
     margin: 0;
     text-align: right;
@@ -361,7 +376,7 @@
   padding: 0;
 
   font-family: 'Montserrat', sans-serif;
-  color: rgb(23, 98, 81);
+  color: rgb(59, 90, 38);
   font-weight: 500;
 
   p {
