@@ -82,36 +82,26 @@
     </div>
   </div>
 
-  <!-- Welcome section -->
+  <!-- Welcome + Menu section -->
   <div class="welcome-section">
-    <div class="welcome-heading">
-      <h2>hello to our<br>family and<br>friends!</h2>
+    <div class="welcome-menu">
+      <a routerLink="/entourage" class="menu-btn">✨ entourage</a>
+      <a routerLink="/directions" class="menu-btn">📍 directions</a>
+      <a routerLink="/attire" class="menu-btn">👗 attire</a>
+      <a routerLink="/gifts" class="menu-btn">🎁 gifts</a>
+      <a *ngIf="inviteToken" [routerLink]="['/rsvp', inviteToken]" class="menu-btn rsvp-btn">💌 rsvp</a>
     </div>
     <div class="welcome-photo photo-placeholder" appScrollReveal>
-      <img src="assets/photos/welcome-photo.png" alt="Arbie and Jerzey">    </div>
+      <img src="assets/photos/jump_aj.png" alt="Arbie and Jerzey">
+    </div>
     <div class="welcome-text">
+      <h2 class="welcome-heading">hello to our<br>family and<br>friends!</h2>
       <p>💛 Welcome! 💛</p>
       <p>We're so happy you're here and can't wait to celebrate our wedding with you. ✨</p>
       <p>After 10 years together, we're finally tying the knot 💍, and we're so excited to share this special moment with our favorite people.</p>
       <p>Feel free to browse through the pages for all the details about our big day. 🤍</p>
       <p>See you soon! 🥂</p>
       <p class="signature">Love,<br><strong>Arbie &amp; Jerzey</strong></p>
-    </div>
-  </div>
-
-  <!-- Menu section -->
-  <div class="menu-section">
-    <div class="menu-photo-wrap">
-      <div class="menu-photo photo-placeholder" appScrollReveal>
-        <img src="assets/photos/menu.png" alt="Arbie and Jerzey">
-      </div>
-    </div>
-    <div class="menu-links">
-      <a routerLink="/entourage" class="menu-btn">✨ entourage</a>
-      <a routerLink="/directions" class="menu-btn">📍 directions</a>
-      <a routerLink="/attire" class="menu-btn">👗 attire</a>
-      <a routerLink="/gifts" class="menu-btn">🎁 gifts</a>
-      <a *ngIf="inviteToken" [routerLink]="['/rsvp', inviteToken]" class="menu-btn rsvp-btn">💌 rsvp</a>
     </div>
   </div>
 
