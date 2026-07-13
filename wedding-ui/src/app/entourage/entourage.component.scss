@@ -131,7 +131,7 @@
   margin: 0.5rem 0;
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 641px) and (max-width: 1024px) {
   .page-hero { height: 50vh; }
   .hero-title { font-size: 34px; top: 8rem; }
 }
@@ -142,7 +142,7 @@
 }
 
 @media (max-width: 640px) {
-  .page-hero { height: 30vh; }
+  .page-hero { height: 70vh; }
   .hero-title { font-size: 28px; top: 5.5rem; white-space: normal; text-align: center; width: 90%; }
   .banner { font-size: 15px; }
   .entourage-list { padding: 0 0.75rem; }

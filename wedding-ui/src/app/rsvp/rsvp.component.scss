@@ -322,8 +322,8 @@
   border-top: 1px solid var(--border);
 }
 
-@media (max-width: 1024px) {
-  .page-hero { height: 60vh; }
+@media (min-width: 641px) and (max-width: 1024px) {
+  .page-hero { height: 50vh; }
   .hero-title { font-size: 34px; top: 8rem; }
 }
 
@@ -334,7 +334,7 @@
 
 @media (max-width: 640px) {
   .page-hero {
-    height: 40vh;
+    height: 70vh;
   }
 
   .hero-title {
