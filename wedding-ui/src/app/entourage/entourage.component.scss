@@ -10,7 +10,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: scale(1.3);
     object-position: center 50%;
   }
 
@@ -133,17 +132,17 @@
 }
 
 @media (max-width: 1024px) {
-  .page-hero { height: 60vh; }
+  .page-hero { height: 50vh; }
   .hero-title { font-size: 34px; top: 8rem; }
 }
 
 @media (orientation: landscape) and (max-height: 768px) {
-  .page-hero { height: 50vh; }
+  .page-hero { height: 40vh; }
   .hero-title { font-size: 24px; top: 2.5rem; }
 }
 
 @media (max-width: 640px) {
-  .page-hero { height: 40vh; }
+  .page-hero { height: 30vh; }
   .hero-title { font-size: 28px; top: 5.5rem; white-space: normal; text-align: center; width: 90%; }
   .banner { font-size: 15px; }
   .entourage-list { padding: 0 0.75rem; }
