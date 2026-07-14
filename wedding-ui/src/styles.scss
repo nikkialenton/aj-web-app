@@ -1,7 +1,23 @@
 @font-face {
   font-family: 'TAN Meringue';
-  src: url('assets/fonts/TAN MERINGUE.woff2') format('woff2');
+  src: url('assets/fonts/TanMeringue.woff2') format('woff2');
   font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('assets/fonts/DMSans.woff2') format('woff2');
+  font-weight: 300 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('assets/fonts/Montserrat.woff2') format('woff2');
+  font-weight: 300 500;
   font-style: normal;
   font-display: swap;
 }

@@ -18,6 +18,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('decadeVideo') decadeVideoRef!: ElementRef<HTMLVideoElement>;
   private videoObserver?: IntersectionObserver;
+  videoLoaded = false;
+
+  private readonly flowerIcons = [
+    'assets/photos/flower_pink.png',
+    'assets/photos/flower_purple.png',
+    'assets/photos/leaf_green.png',
+    'assets/photos/flower_orange.png',
+    'assets/photos/flower_yellow.png',
+    'assets/photos/flower_blue.png',
+  ];
+  decadeLoadingIcon = this.flowerIcons[Math.floor(Math.random() * this.flowerIcons.length)];
 
   constructor(
     private route: ActivatedRoute,
@@ -63,6 +74,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           video.muted = true;
           video.src = video.getAttribute('data-src') ?? '';
           video.load();
+          video.addEventListener('playing', () => this.videoLoaded = true, { once: true });
           video.addEventListener('canplay', () => video.play().catch(() => {}), { once: true });
         }
         this.videoObserver?.unobserve(video);

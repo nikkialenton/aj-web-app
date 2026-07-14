@@ -13,8 +13,8 @@
     <img class="flower f-orange" src="assets/photos/flower_orange.png" alt="">
     <img class="flower f-yellow" src="assets/photos/flower_yellow.png" alt="">
     <img class="flower f-blue"   src="assets/photos/flower_blue.png"   alt="">
-    <svg class="hero-tagline-svg" viewBox="0 0 500 100" xmlns="http://www.w3.org/2000/svg">
-      <path id="tagline-arc" d="M 60,90 Q 250,20 440,90" fill="none"/>
+    <svg class="hero-tagline-svg" viewBox="0 -15 500 115" xmlns="http://www.w3.org/2000/svg">
+      <path id="tagline-arc" d="M 10,90 Q 250,20 490,90" fill="none"/>
       <text>
         <textPath href="#tagline-arc" startOffset="50%" text-anchor="middle">
           TOGETHER WITH LOVE AND JOY
@@ -71,7 +71,10 @@
 
   <!-- Decade section -->
   <div class="decade-section">
-    <video #decadeVideo class="decade-video" autoplay muted loop playsinline preload="none" data-src="assets/photos/arbie_jerzey_timelapse.mp4">
+    <div class="decade-loading" *ngIf="!videoLoaded">
+      <img class="decade-loading-icon" [src]="decadeLoadingIcon" alt="">
+    </div>
+    <video #decadeVideo class="decade-video" [class.is-loaded]="videoLoaded" autoplay muted loop playsinline preload="none" data-src="assets/photos/arbie_jerzey_timelapse.mp4">
     </video>
     <div class="decade-overlay">
       <div class="decade-row">
