@@ -94,7 +94,7 @@
       <a routerLink="/directions" class="menu-btn">📍 directions</a>
       <a routerLink="/attire" class="menu-btn">👗 attire</a>
       <a routerLink="/gifts" class="menu-btn">🎁 gifts</a>
-      <a *ngIf="inviteToken" [routerLink]="['/rsvp', inviteToken]" class="menu-btn rsvp-btn">💌 rsvp</a>
+      <a [routerLink]="inviteToken ? ['/rsvp', inviteToken] : ['/rsvp']" class="menu-btn rsvp-btn">💌 rsvp</a>
     </div>
     <div class="welcome-photo photo-placeholder" appScrollReveal>
       <img src="assets/photos/jump_aj.png" alt="Arbie and Jerzey">

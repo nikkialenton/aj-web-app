@@ -8,7 +8,7 @@ export const routes: Routes = [
   { path: 'attire', loadComponent: () => import('./attire/attire.component').then(m => m.AttireComponent) },
   { path: 'gifts', loadComponent: () => import('./gifts/gifts.component').then(m => m.GiftsComponent) },
   { path: 'rsvp/:token', loadComponent: () => import('./rsvp/rsvp.component').then(m => m.RsvpComponent) },
-  { path: 'rsvp', redirectTo: '' },
+  { path: 'rsvp', loadComponent: () => import('./rsvp/rsvp.component').then(m => m.RsvpComponent) },
   { path: 'admin', loadComponent: () => import('./admin/admin.component').then(m => m.AdminComponent) },
   { path: '**', redirectTo: '' }
 ];

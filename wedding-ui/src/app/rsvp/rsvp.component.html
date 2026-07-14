@@ -5,17 +5,17 @@
     <div class="hero-title">💌 RSVP</div>
   </div>
 
+  <div class="rsvp-wrap" style="padding-bottom:0">
+    <div class="rsvp-deadline" style="text-align:center">
+      <h3>💌 Kindly RSVP by <u>August 14, 2026</u></h3>
+      <p>We would be grateful for your response as we finalize the details of our special day. 🤍</p>
+    </div>
+  </div>
+
   <!-- Loading -->
   <div class="state-center loading-state" *ngIf="showLoading">
     <p class="loading-icon">💌</p>
     <p class="muted">Preparing your invitation…</p>
-  </div>
-
-  <!-- Not found -->
-  <div class="state-center" *ngIf="state === 'not-found'">
-    <p class="icon">🌿</p>
-    <h2>Invitation not found</h2>
-    <p class="muted">This link may be invalid or expired. Please check the link you received. <br> Please contact us if this persists. Thank you 🤍</p>
   </div>
 
   <!-- Already submitted — read-only -->
@@ -39,11 +39,6 @@
 
   <!-- RSVP Form -->
   <div class="rsvp-wrap" *ngIf="state === 'form'">
-    <div class="rsvp-deadline">
-      <h3>💌 Kindly RSVP by <u>August 1, 2026</u></h3>
-      <p>We would be grateful for your response as we finalize the details of our special day. 🤍</p>
-    </div>
-
     <div class="rsvp-form-section">
       <div class="section-head" style="margin-bottom:1.5rem">
         <h2>Hello, {{ guest?.firstName }} 👋</h2>
@@ -161,16 +156,16 @@
     </div>
   </div>
 
-      <div class="faq-banner" *ngIf="state !== 'loading'">FREQUENTLY ASKED QUESTIONS ❓</div>
-    <div class="faq-item" *ngIf="state !== 'loading'">
+      <div class="faq-banner">FREQUENTLY ASKED QUESTIONS ❓</div>
+    <div class="faq-item">
       <div class="faq-label">⏰ Arrival Time</div>
       <div class="faq-body">We recommend arriving by 2:30 PM so you can get settled before the ceremony begins.</div>
     </div>
-    <div class="faq-item" *ngIf="state !== 'loading'">
+    <div class="faq-item">
       <div class="faq-label">🎁 Gifts</div>
       <div class="faq-body">Your presence is the greatest gift of all. If you'd like to bless us further, a little envelope for our future together would be greatly appreciated. 🤍</div>
     </div>
-    <div class="faq-item" *ngIf="state !== 'loading'">
+    <div class="faq-item">
       <div class="faq-label">🤍 A Gentle Reminder</div>
       <div class="faq-body">Due to limited venue capacity, kindly ask that only guests named on the invitation attend. Our celebration will be adults-only. Thank you for your understanding.</div>
     </div>

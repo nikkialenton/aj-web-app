@@ -11,7 +11,7 @@
       <a routerLink="/directions" routerLinkActive="active" (click)="menuOpen = false">directions</a>
       <a routerLink="/attire" routerLinkActive="active" (click)="menuOpen = false">attire</a>
       <a routerLink="/gifts" routerLinkActive="active" (click)="menuOpen = false">gifts</a>
-      <a *ngIf="inviteToken" [routerLink]="['/rsvp', inviteToken]" routerLinkActive="active" (click)="menuOpen = false">rsvp</a>
+      <a [routerLink]="inviteToken ? ['/rsvp', inviteToken] : ['/rsvp']" routerLinkActive="active" (click)="menuOpen = false">rsvp</a>
     </div>
   </nav>
 
